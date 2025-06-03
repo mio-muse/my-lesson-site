@@ -137,6 +137,13 @@
 
     // Start
     showQuestion();
+    const user = localStorage.getItem("lesson_username");
+const resultData = {
+  score: 75,
+  mistakes: [2, 4]  // 問題IDなど
+};
+localStorage.setItem(`${user}_lesson1`, JSON.stringify(resultData));
+
   </script>
 
 </body>
