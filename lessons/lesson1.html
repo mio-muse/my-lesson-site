@@ -16,6 +16,9 @@
 
   <div class="question" id="quiz-container"></div>
   <div class="result" id="result"></div>
+  <div id="note-box" style="background:#f0f0f0; padding:10px; border-radius:8px; margin-bottom:20px;"></div>
+　　　　<div class="question" id="quiz-container"></div>
+
 
   <script>
     const text = document.getElementById("text").innerText;
@@ -79,13 +82,13 @@
       },
       // 🔹 Part 2: Brain Overload Reading (from former lesson1)
       {
-        id: 4,
+        id: 8,
         question: "What does excessive use of smartphones do?",
         choices: ["Improve memory", "Weaken brain functions", "Strengthen concentration", "Help sleep better"],
         answer: 1
       },
       {
-        id: 5,
+        id: 9,
         question: "What is described as a necessary tool?",
         choices: ["Books", "TV", "Smartphones", "Glasses"],
         answer: 2
@@ -139,6 +142,8 @@
       setTimeout(() => {
         resultDiv.innerText = "";
         showQuestion();
+        document.getElementById("note-box").innerText = currentQuestion.note || "";
+
       }, 1000);
     }
 
