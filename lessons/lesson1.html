@@ -18,7 +18,6 @@
     }
     .choices button:hover { background: #eef; }
     .result { font-weight: bold; margin-top: 10px; }
-    #note-box { background: #eef; padding: 10px; border-left: 5px solid #3498db; border-radius: 6px; margin-bottom: 20px; }
     #sentence-box { background: #fff8dc; padding: 10px; border-left: 5px solid #ffa500; border-radius: 6px; margin-bottom: 20px; }
   </style>
 </head>
@@ -38,15 +37,13 @@
         question: "What does 'excessive' most nearly mean?",
         choices: ["少なすぎる", "多すぎる", "普通の", "健康的な"],
         answer: 1,
-        note: "'Excessive' means more than is reasonable or necessary.",
         sentence: "However, it is reported that excessive use of smartphones may weaken our brain functions."
       },
       {
         id: 2,
         question: "What does 'weaken' mean?",
-        choices: ["強くする", "弱める", "直す", "つなぐ"],
+        choices: ["〜を強くする", "〜を弱める", "〜を直す", "〜をつなぐ"],
         answer: 1,
-        note: "'Weaken' means to make something less strong.",
         sentence: "However, it is reported that excessive use of smartphones may weaken our brain functions."
       },
       {
@@ -54,23 +51,20 @@
         question: "What is the meaning of 'function' in this context?",
         choices: ["パーティー", "活動", "目的", "機能・働き"],
         answer: 3,
-        note: "'Function' means the way something works or operates.",
         sentence: "However, it is reported that excessive use of smartphones may weaken our brain functions."
       },
       {
         id: 4,
         question: "What is a 'symptom'?",
-        choices: ["治療", "兆候", "治すもの", "習慣"],
+        choices: ["治療", "症状", "治すもの", "習慣"],
         answer: 1,
-        note: "A symptom is a sign that shows something is wrong.",
         sentence: "These symptoms are called “brain overload” or digital cognitive dysfunction."
       },
       {
         id: 5,
         question: "What does 'overload' mean?",
-        choices: ["足りない", "充電する", "多すぎて処理できない", "掃除する"],
+        choices: ["不測", "充電", "過労", "掃除"],
         answer: 2,
-        note: "'Overload' means giving too much of something, beyond the limit.",
         sentence: "Our brains become overloaded when we use smartphones excessively."
       },
 
@@ -80,14 +74,15 @@
         question: "What causes cognitive dysfunction according to the passage?",
         choices: ["Eating unhealthy food", "Sleeping too much", "Overusing smartphones", "Reading books"],
         answer: 2,
-        note: "The passage states that overusing smartphones can lead to brain overload and cognitive dysfunction."
+        sentence: "Today, smartphones have become a necessary tool in our daily lives.  However, it is reported that excessive use of smartphones may weaken our brain functions.  Smartphones give us much more information than we realize through texts, images, and videos.  Unfortunately, our brains cannot deal with such a huge amount of information at the same time.  By overusing smartphones, we may become more forgetful and even lose our ability to judge things properly.  These symptoms are called “brain overload” or digital cognitive dysfunction."
       },
       {
         id: 7,
-        question: "What do the blue parts of the brain image represent?",
-        choices: ["Stronger brain activity", "More memory", "Decreased blood flow", "Positive thinking"],
-        answer: 2,
-        note: "Blue areas indicate reduced blood flow, showing impaired brain function."
+        question: "What do smartphones give us through texts, images, and videos?",
+        choices: ["Too much information", "Better sleep", "Clear thinking", "Strong memory"],
+        answer: 0,
+        sentence: "Today, smartphones have become a necessary tool in our daily lives.  However, it is reported that excessive use of smartphones may weaken our brain functions.  Smartphones give us much more information than we realize through texts, images, and videos.  Unfortunately, our brains cannot deal with such a huge amount of information at the same time.  By overusing smartphones, we may become more forgetful and even lose our ability to judge things properly.  These symptoms are called “brain overload” or digital cognitive dysfunction."
+      },
       }
     ];
 
