@@ -2,34 +2,118 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Lesson 2: Protecting Our Brains from Smartphones</title>
+  <title>My English Lessons</title>
   <style>
-    body { font-family: Arial; max-width: 700px; margin: auto; padding: 20px; }
-    h1, h2 { color: #2c3e50; }
-    .lesson-list { margin-top: 20px; }
-    .lesson { margin-bottom: 15px; }
-    input { padding: 8px; font-size: 1em; margin-bottom: 10px; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f8f9fa;
+      margin: 0;
+      padding: 20px;
+      color: #2c3e50;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    #user-input {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      font-size: 1em;
+      width: 250px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin-left: 10px;
+      font-size: 1em;
+      border: none;
+      border-radius: 6px;
+      background-color: #3498db;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #2980b9;
+    }
+
+    .lesson-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .lesson-card {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      padding: 20px;
+      width: 300px;
+      text-align: left;
+      transition: transform 0.2s ease;
+    }
+
+    .lesson-card:hover {
+      transform: scale(1.02);
+    }
+
+    .lesson-title {
+      font-size: 1.2em;
+      margin-bottom: 10px;
+    }
+
+    .lesson-title a {
+      text-decoration: none;
+      color: #2c3e50;
+    }
+
+    .lesson-title a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 600px) {
+      .lesson-list {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .lesson-card {
+        width: 90%;
+      }
+    }
   </style>
 </head>
 <body>
 
-  <h1><font-style: Calibri>Lesson 2: Protecting Our Brains from Smartphones</h1>
+  <h1>📘 English Learning Course</h1>
 
-  <label for="username">Enter your name:</label><br>
-  <input type="text" id="username" placeholder="Your name">
-  <button onclick="saveUsername()">Start</button>
+  <div id="user-input">
+    <label for="username">Enter your name:</label><br>
+    <input type="text" id="username" placeholder="Your name">
+    <button onclick="saveUsername()">Start</button>
+  </div>
 
   <div id="welcome" style="display:none;">
-    <h2>Welcome, <span id="user-name"></span>!</h2>
+    <h2>Hello, <span id="user-name"></span>!</h2>
     <p>Your lesson progress:</p>
     <div class="lesson-list" id="lesson-list"></div>
   </div>
 
   <script>
     const lessons = [
-      { id: "lesson1", title: "🧠 Reading Comprehension", link: "lessons/lesson1.html" },
+      { id: "lesson1", title: "🧠 Brain Overload Reading", link: "lessons/lesson1.html" },
       { id: "lesson2", title: "🕒 Present Simple Tense", link: "lessons/lesson2.html" },
-      { id: "lesson3", title: "📱 Vocabulary", link: "lessons/lesson3.html" }
+      { id: "lesson3", title: "📱 Technology Vocabulary", link: "lessons/lesson3.html" }
     ];
 
     function saveUsername() {
@@ -55,16 +139,15 @@
         const mistakes = userData.mistakes ? userData.mistakes.length : 0;
 
         const html = `
-          <div class="lesson">
-            <a href="${lesson.link}">${lesson.title}</a><br>
-            🔢 Score: ${score} | ❌ Mistakes: ${mistakes}
+          <div class="lesson-card">
+            <div class="lesson-title"><a href="${lesson.link}">${lesson.title}</a></div>
+            <p>🔢 Score: ${score}<br>❌ Mistakes: ${mistakes}</p>
           </div>
         `;
         listDiv.innerHTML += html;
       });
     }
 
-    // 自動読み込み
     window.onload = loadUserProgress;
   </script>
 
