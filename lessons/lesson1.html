@@ -1,1 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lesson 1: Brain Overload</title>
+  <style>
+    body { font-family: sans-serif; max-width: 800px; margin: auto; line-height: 1.6; padding: 20px; }
+    .question { margin-top: 20px; }
+    .choices button { margin: 5px; display: block; }
+    .result { font-weight: bold; margin-top: 10px; }
+  </style>
+</head>
+<body>
 
+  <h1>🧠 Lesson 1: Brain Overload</h1>
+  <button onclick="speak(text)">🔊 Listen to the passage</button>
+  <p id="text">
+    Today, smartphones have become a necessary tool in our daily lives. However, it is reported that excessive use of smartphones may weaken our brain functions.
+  </p>
+
+  <div class="question" id="quiz-container"></div>
+  <div class="result" id="result"></div>
+
+  <script>
+    const text = document.getElementById("text").innerText;
+
+    function speak(text) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'en-US';
+      speechSynthesis.speak(utterance);
+    }
+
+    const questions = [
+      {
+        id: 1,
+        question: "What does excessive use of smartphones do?",
+        choices: [
+          "Improve memory",
+          "Weaken brain functions",
+          "Strengthen concentration",
+          "Help sleep better"
+        ],
+        answer: 1
+      },
+      {
+        id: 2,
+        question: "What is described as a necessary tool?",
+        choices: [
+          "Books",
+          "TV",
+          "Smartphones",
+          "Glasses"
+        ],
+        answer: 2
+      }
+    ];
+
+    let mainPool = [...questions];
+    let retryPool = [];
+    let answeredLog = {};
+    let mistakes = [];
+
+    let currentQuestion = null;
+
+    function getNextQuestion() {
+      if (mainPool.length > 0) {
+        return mainPool.shift();
+      }
+
+      const retryCandidates = retryPool.filter(q => !answeredLog[q.id]);
+      if (retryCandidates.length > 0) {
+        return retryCandidates[Math.floor(Math.random() * retryCandidates.length)];
+      }
+
+      return null;
+    }
+
+    function showQuestion() {
+      currentQuestion = getNextQuestion();
+
+      if (!currentQuestion) {
+        showResult();
+        return;
+      }
+
+      let html = `<h3>${currentQuestion.question}</h3><div class="choices">`;
+      currentQuestion.choices.forEach((choice, i) => {
+        html += `<button onclick="checkAnswer(${i})">${choice}</button>`;
+      });
+      html += "</div>";
+      document.getElementById("quiz-container").innerHTML = html;
+    }
+
+    function checkAnswer(selected) {
+      const q = currentQuestion;
+      const resultDiv = document.getElementById("result");
+
+      if (selected === q.answer) {
+        answeredLog[q.id] = true;
+        resultDiv.innerText = "✅ Correct!";
+      } else {
+        resultDiv.innerText = "❌ Incorrect. Will appear again.";
+        if (!retryPool.some(item => item.id === q.id)) {
+          retryPool.push(q);
+        }
+        if (!mistakes.includes(q.id)) {
+          mistakes.push(q.id);
+        }
+      }
+
+      setTimeout(() => {
+        resultDiv.innerText = "";
+        showQuestion();
+      }, 1000);
+    }
+
+    function showResult() {
+      const total = questions.length;
+      const correct = Object.keys(answeredLog).length;
+      const score = Math.floor((correct / total) * 100);
+
+      document.getElementById("quiz-container").innerHTML = `
+        <h2>🎉 You completed Lesson 1!</h2>
+        <p>✅ Score: ${score}%</p>
+        <p>❌ Mistakes: ${mistakes.length} question(s)</p>
+        <a href="../index.html">🔙 Back to Top</a>
+      `;
+
+      // Save result to localStorage
+      const user = localStorage.getItem("lesson_username") || "default";
+      const resultData = {
+        score: score,
+        mistakes: mistakes
+      };
+      localStorage.setItem(`${user}_lesson1`, JSON.stringify(resultData));
+    }
+
+    // Start
+    showQuestion();
+  </script>
+
+</body>
+</html>
