@@ -6,62 +6,88 @@
   <style>
     body { font-family: sans-serif; max-width: 800px; margin: auto; line-height: 1.6; padding: 20px; background: #f9f9f9; }
     .question { margin-top: 20px; }
-    .choices button { margin: 5px; display: block; width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #ccc; background: #fff; cursor: pointer; }
+    .choices { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+    .choices button {
+      flex: 1 1 45%;
+      padding: 15px;
+      font-size: 1.1em;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      background: #fff;
+      cursor: pointer;
+    }
     .choices button:hover { background: #eef; }
     .result { font-weight: bold; margin-top: 10px; }
     #note-box { background: #eef; padding: 10px; border-left: 5px solid #3498db; border-radius: 6px; margin-bottom: 20px; }
+    #sentence-box { background: #fff8dc; padding: 10px; border-left: 5px solid #ffa500; border-radius: 6px; margin-bottom: 20px; }
   </style>
 </head>
 <body>
 
   <h1>📖 Lesson 1: Vocabulary & Comprehension</h1>
   <div id="note-box"></div>
+  <div id="sentence-box"></div>
   <div class="question" id="quiz-container"></div>
   <div class="result" id="result"></div>
 
   <script>
     const questions = [
+      // Vocabulary questions with sentence context (choices in Japanese)
       {
         id: 1,
-        question: "What does 'necessary' most nearly mean?",
-        choices: ["Dangerous", "Important", "Optional", "Complicated"],
+        question: "What does 'excessive' most nearly mean?",
+        choices: ["少なすぎる", "多すぎる", "普通の", "健康的な"],
         answer: 1,
-        note: "The word 'necessary' means something that is needed or important."
+        note: "'Excessive' means more than is reasonable or necessary.",
+        sentence: "However, it is reported that excessive use of smartphones may weaken our brain functions."
       },
       {
         id: 2,
-        question: "What does the blue part in the brain image indicate?",
-        choices: ["Higher activity", "Better memory", "Reduced blood flow", "Improved function"],
-        answer: 2,
-        note: "Blue areas in the brain image show reduced blood flow, indicating impaired function."
+        question: "What does 'weaken' mean?",
+        choices: ["強くする", "弱める", "直す", "つなぐ"],
+        answer: 1,
+        note: "'Weaken' means to make something less strong.",
+        sentence: "However, it is reported that excessive use of smartphones may weaken our brain functions."
       },
       {
         id: 3,
-        question: "How many stages are there in the brain's information processing?",
-        choices: ["Two", "Three", "Four", "Five"],
-        answer: 1,
-        note: "Our brains process information in three stages: input, organization, and output."
+        question: "What is the meaning of 'function' in this context?",
+        choices: ["パーティー", "活動", "目的", "機能・働き"],
+        answer: 3,
+        note: "'Function' means the way something works or operates.",
+        sentence: "However, it is reported that excessive use of smartphones may weaken our brain functions."
       },
       {
         id: 4,
-        question: "What is 'cognitive dysfunction'?",
-        choices: ["Improved learning", "Brain overload", "Faster memory", "Brain organization"],
+        question: "What is a 'symptom'?",
+        choices: ["治療", "兆候", "治すもの", "習慣"],
         answer: 1,
-        note: "Cognitive dysfunction means that the brain does not work properly, often due to overload."
+        note: "A symptom is a sign that shows something is wrong.",
+        sentence: "These symptoms are called “brain overload” or digital cognitive dysfunction."
       },
       {
         id: 5,
-        question: "What helps the brain to organize information?",
-        choices: ["Watching TV", "Playing games", "Resting", "Texting"],
+        question: "What does 'overload' mean?",
+        choices: ["足りない", "充電する", "多すぎて処理できない", "掃除する"],
         answer: 2,
-        note: "The brain organizes information only while we are resting."
+        note: "'Overload' means giving too much of something, beyond the limit.",
+        sentence: "Our brains become overloaded when we use smartphones excessively."
       },
+
+      // Comprehension questions (keep in English)
       {
         id: 6,
-        question: "Which age group is increasingly affected by cognitive dysfunction?",
-        choices: ["Teenagers", "People in their 30s to 50s", "Elderly", "Children under 10"],
-        answer: 1,
-        note: "A doctor says about 40% of patients are now in their 30s to 50s."
+        question: "What causes cognitive dysfunction according to the passage?",
+        choices: ["Eating unhealthy food", "Sleeping too much", "Overusing smartphones", "Reading books"],
+        answer: 2,
+        note: "The passage states that overusing smartphones can lead to brain overload and cognitive dysfunction."
+      },
+      {
+        id: 7,
+        question: "What do the blue parts of the brain image represent?",
+        choices: ["Stronger brain activity", "More memory", "Decreased blood flow", "Positive thinking"],
+        answer: 2,
+        note: "Blue areas indicate reduced blood flow, showing impaired brain function."
       }
     ];
 
@@ -86,7 +112,9 @@
         showResult();
         return;
       }
+
       document.getElementById("note-box").innerText = currentQuestion.note || "";
+      document.getElementById("sentence-box").innerText = currentQuestion.sentence || "";
 
       let html = `<h3>${currentQuestion.question}</h3><div class="choices">`;
       currentQuestion.choices.forEach((choice, i) => {
