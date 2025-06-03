@@ -11,10 +11,10 @@
       line-height: 1.6;
       padding: 20px;
       background-image: url("background.png");
-      background-size: cover;         /* 拡大して表示 */
+      background-size: cover;
       background-repeat: no-repeat;
-      background-attachment: fixed;   /* スクロール時も固定 */
-      background-position: center;    /* 中央に配置 */
+      background-attachment: fixed;
+      background-position: center;
       background-color: #f9f9f9;
     }
 
@@ -101,7 +101,7 @@
 </head>
 <body>
 
-  <h1><img src="L2title.png", height="250"></h1>
+  <h1><img src="L2title.png" height="250"></h1>
 
   <div id="user-input">
     <label for="username">Enter your name:</label><br>
@@ -110,10 +110,10 @@
   </div>
 
   <div id="welcome" style="display:none;">
-    <h2><center>Hello, <span id="user-name"></span>!</h2>
-    <p><center>Your lesson progress:</p>
+    <h2><center>Hello, <span id="user-name"></span>!</center></h2>
+    <p><center>Your lesson progress:</center></p>
     <div class="lesson-list" id="lesson-list">
-    <div id="lesson1-result" class="lesson-result"></div>
+      <div id="lesson1-result" class="lesson-result"></div>
     </div>
   </div>
 
@@ -146,10 +146,18 @@
         const score = userData.score !== undefined ? `${userData.score}%` : "Not started";
         const mistakes = userData.mistakes ? userData.mistakes.length : 0;
 
+        const timeTaken = userData.timeTaken !== undefined
+          ? `${Math.floor(userData.timeTaken / 60)}m ${userData.timeTaken % 60}s`
+          : "N/A";
+
         const html = `
           <div class="lesson-card">
             <div class="lesson-title"><a href="${lesson.link}">${lesson.title}</a></div>
-            <p>🔢 Score: ${score}<br>❌ Mistakes: ${mistakes}</p>
+            <p>
+              🔢 Score: ${score}<br>
+              ❌ Mistakes: ${mistakes}<br>
+              ⏱️ Time: ${timeTaken}
+            </p>
           </div>
         `;
         listDiv.innerHTML += html;
