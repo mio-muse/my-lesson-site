@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lesson 3: Technology Vocabulary</title>
+  <style>
+    body { font-family: sans-serif; max-width: 800px; margin: auto; line-height: 1.6; padding: 20px; }
+    .question { margin-top: 20px; }
+    .choices button { margin: 5px; display: block; }
+    .result { font-weight: bold; margin-top: 10px; }
+  </style>
+</head>
+<body>
+
+  <h1>📱 Lesson 3: Technology Vocabulary</h1>
+  <button onclick="speak(text)">🔊 Listen to the passage</button>
+  <p id="text">
+    Smartphones, tablets, and laptops are common digital devices. We use them to browse the internet, send emails, and download apps. Technology is now an essential part of our daily lives.
+  </p>
+
+  <div class="question" id="quiz-container"></div>
+  <div class="result" id="result"></div>
+
+  <script>
+    const text = document.getElementById("text").innerText;
+
+    function speak(text) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'en-US';
+      speechSynthesis.speak(utterance);
+    }
+
+    const questions = [
+      {
+        id: 1,
+        question: "What is the meaning of 'device'?",
+        choices: [
+          "A kind of software",
+          "A type of book",
+          "A piece of technology",
+          "A way to speak"
+        ],
+        answer: 2
+      },
+      {
+        id: 2,
+        question: "Which of the following is NOT a digital device?",
+        choices: [
+          "Tablet",
+          "Laptop",
+          "Pen",
+          "Smartphone"
+        ],
+        answer: 2
+      },
+      {
+        id: 3,
+        question: "What does 'download' mean?",
+        choices: [
+          "To remove apps",
+          "To get something from the internet",
+          "To buy a new phone",
+          "To look at a screen"
+        ],
+        answer: 1
+      }
+    ];
+
+    let mainPool = [...questions];
+    let retryPool = [];
+    let answeredLog = {};
+    let mistakes = [];
+
+    let currentQuestion = null;
+
+    function getNextQuestion() {
+      if (mainPool.length > 0) {
+        return mainPool.shift();
+      }
+      const retryCandidates = retryPool.filter(q => !answeredLog[q.id]);
+      if (retryCandidates.length > 0) {
+        return retryCandidates[Math.floor(Math.random() * retryCandidates.length)];
+      }
+      return null;
+    }
+
+    function showQuestion() {
+      currentQuestion = getNextQuestion();
+      if (!currentQuestion) {
+        showResult();
+        return;
+      }
+
+      let html = `<h3>${currentQuestion.question}</h3><div class="choices">`;
+      currentQuestion.choices.forEach((choice, i) => {
+        html += `<button onclick="checkAnswer(${i})">${choice}</button>`;
+      });
+      html += "</div>";
+      document.getElementById("quiz-container").innerHTML = html;
+    }
+
+    function checkAnswer(selected) {
+      const q = currentQuestion;
+      const resultDiv = document.getElementById("result");
+
+      if (selected === q.answer) {
+        answeredLog[q.id] = true;
+        resultDiv.innerText = "✅ Correct!";
+      } else {
+        resultDiv.innerText = "❌ Incorrect. Will appear again.";
+        if (!retryPool.some(item => item.id === q.id)) {
+          retryPool.push(q);
+        }
+        if (!mistakes.includes(q.id)) {
+          mistakes.push(q.id);
+        }
+      }
+
+      setTimeout(() => {
+        resultDiv.innerText = "";
+        showQuestion();
+      }, 1000);
+    }
+
+    function showResult() {
+      const total = questions.length;
+      const correct = Object.keys(answeredLog).length;
+      const score = Math.floor((correct / total) * 100);
+
+      document.getElementById("quiz-container").innerHTML = `
+        <h2>🎉 You completed Lesson 3!</h2>
+        <p>✅ Score: ${score}%</p>
+        <p>❌ Mistakes: ${mistakes.length} question(s)</p>
+        <a href="../index.html">🔙 Back to Top</a>
+      `;
+
+      const user = localStorage.getItem("lesson_username") || "default";
+      const resultData = {
+        score: score,
+        mistakes: mistakes
+      };
+      localStorage.setItem(`${user}_lesson3`, JSON.stringify(resultData));
+    }
+
+    showQuestion();
+  </script>
+
+</body>
+</html>
