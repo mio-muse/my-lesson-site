@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Lesson 1: Brain Overload</title>
+  <title>Lesson 1: Vocabulary + Reading</title>
   <style>
     body { font-family: sans-serif; max-width: 800px; margin: auto; line-height: 1.6; padding: 20px; }
     .question { margin-top: 20px; }
@@ -12,9 +12,11 @@
 </head>
 <body>
 
-  <h1>🧠 Lesson 1: Brain Overload</h1>
+  <h1>📘 Lesson 1: Vocabulary + Reading</h1>
   <button onclick="speak(text)">🔊 Listen to the passage</button>
   <p id="text">
+    Smartphones, tablets, and laptops are common digital devices. We use them to browse the internet, send emails, and download apps. Technology is now an essential part of our daily lives.
+
     Today, smartphones have become a necessary tool in our daily lives. However, it is reported that excessive use of smartphones may weaken our brain functions.
   </p>
 
@@ -31,26 +33,36 @@
     }
 
     const questions = [
+      // 🔹 Part 1: Technology Vocabulary (from former lesson3)
       {
         id: 1,
-        question: "What does excessive use of smartphones do?",
-        choices: [
-          "Improve memory",
-          "Weaken brain functions",
-          "Strengthen concentration",
-          "Help sleep better"
-        ],
-        answer: 1
+        question: "What is the meaning of 'device'?",
+        choices: ["A kind of software", "A type of book", "A piece of technology", "A way to speak"],
+        answer: 2
       },
       {
         id: 2,
-        question: "What is described as a necessary tool in our daily lives?",
-        choices: [
-          "Books",
-          "TV",
-          "Smartphones",
-          "Glasses"
-        ],
+        question: "Which of the following is NOT a digital device?",
+        choices: ["Tablet", "Laptop", "Pen", "Smartphone"],
+        answer: 2
+      },
+      {
+        id: 3,
+        question: "What does 'download' mean?",
+        choices: ["To remove apps", "To get something from the internet", "To buy a new phone", "To look at a screen"],
+        answer: 1
+      },
+      // 🔹 Part 2: Brain Overload Reading (from former lesson1)
+      {
+        id: 4,
+        question: "What does excessive use of smartphones do?",
+        choices: ["Improve memory", "Weaken brain functions", "Strengthen concentration", "Help sleep better"],
+        answer: 1
+      },
+      {
+        id: 5,
+        question: "What is described as a necessary tool?",
+        choices: ["Books", "TV", "Smartphones", "Glasses"],
         answer: 2
       }
     ];
@@ -63,21 +75,16 @@
     let currentQuestion = null;
 
     function getNextQuestion() {
-      if (mainPool.length > 0) {
-        return mainPool.shift();
-      }
-
+      if (mainPool.length > 0) return mainPool.shift();
       const retryCandidates = retryPool.filter(q => !answeredLog[q.id]);
       if (retryCandidates.length > 0) {
         return retryCandidates[Math.floor(Math.random() * retryCandidates.length)];
       }
-
       return null;
     }
 
     function showQuestion() {
       currentQuestion = getNextQuestion();
-
       if (!currentQuestion) {
         showResult();
         return;
@@ -100,12 +107,8 @@
         resultDiv.innerText = "✅ Correct!";
       } else {
         resultDiv.innerText = "❌ Incorrect. Will appear again.";
-        if (!retryPool.some(item => item.id === q.id)) {
-          retryPool.push(q);
-        }
-        if (!mistakes.includes(q.id)) {
-          mistakes.push(q.id);
-        }
+        if (!retryPool.some(item => item.id === q.id)) retryPool.push(q);
+        if (!mistakes.includes(q.id)) mistakes.push(q.id);
       }
 
       setTimeout(() => {
@@ -120,13 +123,12 @@
       const score = Math.floor((correct / total) * 100);
 
       document.getElementById("quiz-container").innerHTML = `
-        <h2>🎉 You completed Lesson 1!</h2>
+        <h2>🎉 You completed the combined lesson!</h2>
         <p>✅ Score: ${score}%</p>
         <p>❌ Mistakes: ${mistakes.length} question(s)</p>
         <a href="../index.html">🔙 Back to Top</a>
       `;
 
-      // Save result to localStorage
       const user = localStorage.getItem("lesson_username") || "default";
       const resultData = {
         score: score,
@@ -135,15 +137,7 @@
       localStorage.setItem(`${user}_lesson1`, JSON.stringify(resultData));
     }
 
-    // Start
     showQuestion();
-    const user = localStorage.getItem("lesson_username");
-const resultData = {
-  score: 75,
-  mistakes: [2, 4]  // 問題IDなど
-};
-localStorage.setItem(`${user}_lesson1`, JSON.stringify(resultData));
-
   </script>
 
 </body>
