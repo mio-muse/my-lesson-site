@@ -2,96 +2,66 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Lesson 1: Vocabulary + Reading</title>
+  <title>Lesson 1: Vocabulary & Comprehension</title>
   <style>
-    body { font-family: calibri; max-width: 800px; margin: auto; line-height: 1.6; padding: 20px; }
+    body { font-family: sans-serif; max-width: 800px; margin: auto; line-height: 1.6; padding: 20px; background: #f9f9f9; }
     .question { margin-top: 20px; }
-    .choices button { margin: 5px; display: block; }
+    .choices button { margin: 5px; display: block; width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #ccc; background: #fff; cursor: pointer; }
+    .choices button:hover { background: #eef; }
     .result { font-weight: bold; margin-top: 10px; }
+    #note-box { background: #eef; padding: 10px; border-left: 5px solid #3498db; border-radius: 6px; margin-bottom: 20px; }
   </style>
 </head>
 <body>
 
-  <h1>📘 Lesson 1: Vocabulary + Reading</h1>
-
+  <h1>📖 Lesson 1: Vocabulary & Comprehension</h1>
+  <div id="note-box"></div>
   <div class="question" id="quiz-container"></div>
   <div class="result" id="result"></div>
-  <div id="note-box" style="background:#f0f0f0; padding:10px; border-radius:8px; margin-bottom:20px;"></div>
-　　　　<div class="question" id="quiz-container"></div>
-
 
   <script>
-    const text = document.getElementById("text").innerText;
-
-    function speak(text) {
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'en-US';
-      speechSynthesis.speak(utterance);
-    }
-
     const questions = [
-      // 🔹 Part 1: Vocabulary
       {
         id: 1,
-        question: "What does 'excessive' mean?",
-        choices: ["中毒の", "忘れやすい", "過度の", "過度に"],
-        answer: 2
-        note: "It is reported that excessive use of smartphones may weaken our brain functions."
+        question: "What does 'necessary' most nearly mean?",
+        choices: ["Dangerous", "Important", "Optional", "Complicated"],
+        answer: 1,
+        note: "The word 'necessary' means something that is needed or important."
       },
-    {
+      {
         id: 2,
-        question: "What does 'weaken' mean?",
-        choices: ["弱い", "〜を低下させる", "週", "〜を示す"],
-        answer: 1
-        note: "It is reported that excessive use of smartphones may weaken our brain functions."
+        question: "What does the blue part in the brain image indicate?",
+        choices: ["Higher activity", "Better memory", "Reduced blood flow", "Improved function"],
+        answer: 2,
+        note: "Blue areas in the brain image show reduced blood flow, indicating impaired function."
       },
       {
         id: 3,
-        question: "What does 'analysis' mean?",
-        choices: ["分類", "機能", "分析", "対策"],
-        answer: 2
-        note: "This analysis of brain function images demonstrates that overusing smartphones has a negative effect on our brains."
+        question: "How many stages are there in the brain's information processing?",
+        choices: ["Two", "Three", "Four", "Five"],
+        answer: 1,
+        note: "Our brains process information in three stages: input, organization, and output."
       },
       {
         id: 4,
-        question: "What does 'demonstrate' mean?",
-        choices: ["〜を分析する", "〜を消去する", "回復する", "〜を実証する"],
-        answer: 3
-        note: "This analysis of brain function images demonstrates that overusing smartphones has a negative effect on our brains."
+        question: "What is 'cognitive dysfunction'?",
+        choices: ["Improved learning", "Brain overload", "Faster memory", "Brain organization"],
+        answer: 1,
+        note: "Cognitive dysfunction means that the brain does not work properly, often due to overload."
       },
       {
         id: 5,
-        question: "What does 'whereby' mean?",
-        choices: ["一方で", "それによって", "非常に", "目的もなく"],
-        answer: 1
-        note: "The second stage, “organization,” is the key to processing information, whereby our brains sort information, then store the important information and delete the rest."
+        question: "What helps the brain to organize information?",
+        choices: ["Watching TV", "Playing games", "Resting", "Texting"],
+        answer: 2,
+        note: "The brain organizes information only while we are resting."
       },
       {
         id: 6,
-        question: "What does 'sort' mean?",
-        choices: ["〜を分類する", "〜を示す", "〜を分析する", "〜を制限する"],
-        answer: 0
-        note: "The second stage, “organization,” is the key to processing information, whereby our brains sort information, then store the important information and delete the rest."
-      },
-      {
-        id: 7,
-        question: "What does 'delete' mean?",
-        choices: ["〜を使いすぎる", "〜を含む", "〜を消去する", "〜を主張する"],
-        answer: 2
-        note: "The second stage, “organization,” is the key to processing information, whereby our brains sort information, then store the important information and delete the rest.""
-      },
-      // 🔹 Part 2: Brain Overload Reading (from former lesson1)
-      {
-        id: 8,
-        question: "What does excessive use of smartphones do?",
-        choices: ["Improve memory", "Weaken brain functions", "Strengthen concentration", "Help sleep better"],
-        answer: 1
-      },
-      {
-        id: 9,
-        question: "What is described as a necessary tool?",
-        choices: ["Books", "TV", "Smartphones", "Glasses"],
-        answer: 2
+        question: "Which age group is increasingly affected by cognitive dysfunction?",
+        choices: ["Teenagers", "People in their 30s to 50s", "Elderly", "Children under 10"],
+        answer: 1,
+        note: "A doctor says about 40% of patients are now in their 30s to 50s."
       }
     ];
 
@@ -99,7 +69,6 @@
     let retryPool = [];
     let answeredLog = {};
     let mistakes = [];
-
     let currentQuestion = null;
 
     function getNextQuestion() {
@@ -117,12 +86,13 @@
         showResult();
         return;
       }
+      document.getElementById("note-box").innerText = currentQuestion.note || "";
 
       let html = `<h3>${currentQuestion.question}</h3><div class="choices">`;
       currentQuestion.choices.forEach((choice, i) => {
         html += `<button onclick="checkAnswer(${i})">${choice}</button>`;
       });
-      html += "</div>";
+      html += `</div>`;
       document.getElementById("quiz-container").innerHTML = html;
     }
 
@@ -134,7 +104,7 @@
         answeredLog[q.id] = true;
         resultDiv.innerText = "✅ Correct!";
       } else {
-        resultDiv.innerText = "❌ Incorrect. Will appear again.";
+        resultDiv.innerText = "❌ Incorrect. It will appear again.";
         if (!retryPool.some(item => item.id === q.id)) retryPool.push(q);
         if (!mistakes.includes(q.id)) mistakes.push(q.id);
       }
@@ -142,8 +112,6 @@
       setTimeout(() => {
         resultDiv.innerText = "";
         showQuestion();
-        document.getElementById("note-box").innerText = currentQuestion.note || "";
-
       }, 1000);
     }
 
@@ -153,22 +121,18 @@
       const score = Math.floor((correct / total) * 100);
 
       document.getElementById("quiz-container").innerHTML = `
-        <h2>🎉 You completed the combined lesson!</h2>
+        <h2>🎉 You completed the lesson!</h2>
         <p>✅ Score: ${score}%</p>
         <p>❌ Mistakes: ${mistakes.length} question(s)</p>
         <a href="../index.html">🔙 Back to Top</a>
       `;
 
       const user = localStorage.getItem("lesson_username") || "default";
-      const resultData = {
-        score: score,
-        mistakes: mistakes
-      };
+      const resultData = { score: score, mistakes: mistakes };
       localStorage.setItem(`${user}_lesson1`, JSON.stringify(resultData));
     }
 
     showQuestion();
   </script>
-
 </body>
 </html>
