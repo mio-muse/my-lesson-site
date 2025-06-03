@@ -68,8 +68,8 @@
       { id: 3, question: "What is the meaning of 'function' in this context?", choices: ["パーティー", "活動", "目的", "機能・働き"], answer: 3, sentence: "However, it is reported that excessive use of smartphones may weaken our brain functions." },
       { id: 4, question: "What is a 'symptom'?", choices: ["治療", "症状", "治すもの", "習慣"], answer: 1, sentence: "These symptoms are called “brain overload” or digital cognitive dysfunction." },
       { id: 5, question: "What does 'overload' mean?", choices: ["不足", "充電", "過労", "掃除"], answer: 2, sentence: "Our brains become overloaded when we use smartphones excessively." },
-      { id: 6, question: "What causes cognitive dysfunction according to the passage?", choices: ["Eating unhealthy food", "Sleeping too much", "Overusing smartphones", "Reading books"], answer: 2, sentence: "Today, smartphones have become a necessary tool in our daily lives.  However, it is reported that excessive use of smartphones may weaken our brain functions.  Smartphones give us much more information than we realize through texts, images, and videos.  Unfortunately, our brains cannot deal with such a huge amount of information at the same time.  By overusing smartphones, we may become more forgetful and even lose our ability to judge things properly.  These symptoms are called “brain overload” or digital cognitive dysfunction." },
-      { id: 7, question: "What do smartphones give us through texts, images, and videos?", choices: ["Too much information", "Stronger memory", "Clearer thinking", "Better sleep"], answer: 0, sentence: "Today, smartphones have become a necessary tool in our daily lives.  However, it is reported that excessive use of smartphones may weaken our brain functions.  Smartphones give us much more information than we realize through texts, images, and videos.  Unfortunately, our brains cannot deal with such a huge amount of information at the same time.  By overusing smartphones, we may become more forgetful and even lose our ability to judge things properly.  These symptoms are called “brain overload” or digital cognitive dysfunction." }
+      { id: 6, question: "What causes cognitive dysfunction according to the passage?", choices: ["Eating unhealthy food", "Sleeping too much", "Overusing smartphones", "Reading books"], answer: 2, sentence: "Today, smartphones have become a necessary tool in our daily lives. However, it is reported that excessive use of smartphones may weaken our brain functions..." },
+      { id: 7, question: "What do smartphones give us through texts, images, and videos?", choices: ["Too much information", "Stronger memory", "Clearer thinking", "Better sleep"], answer: 0, sentence: "Smartphones give us much more information than we realize through texts, images, and videos." }
     ];
 
     let mainPool = [...questions];
@@ -77,7 +77,17 @@
     let answeredLog = {};
     let mistakes = [];
     let currentQuestion = null;
+    let shuffledChoices = [];
+    let correctIndex = -1;
     let startTime = Date.now();
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
 
     function getNextQuestion() {
       if (mainPool.length > 0) return mainPool.shift();
@@ -97,8 +107,18 @@
 
       document.getElementById("sentence-box").innerText = currentQuestion.sentence || "";
 
+      // シャッフル処理
+      const indexedChoices = currentQuestion.choices.map((choice, i) => ({
+        index: i,
+        text: choice
+      }));
+      const shuffled = shuffle(indexedChoices);
+      shuffledChoices = shuffled.map(c => c.text);
+      correctIndex = shuffled.findIndex(c => c.index === currentQuestion.answer);
+
+      // 表示
       let html = `<h3>${currentQuestion.question}</h3><div class="choices">`;
-      currentQuestion.choices.forEach((choice, i) => {
+      shuffledChoices.forEach((choice, i) => {
         html += `<button onclick="checkAnswer(${i})">${choice}</button>`;
       });
       html += `</div>`;
@@ -106,16 +126,15 @@
     }
 
     function checkAnswer(selected) {
-      const q = currentQuestion;
       const resultDiv = document.getElementById("result");
 
-      if (selected === q.answer) {
-        answeredLog[q.id] = true;
+      if (selected === correctIndex) {
+        answeredLog[currentQuestion.id] = true;
         resultDiv.innerText = "✅ Correct!";
       } else {
         resultDiv.innerText = "❌ Incorrect. It will appear again.";
-        if (!retryPool.some(item => item.id === q.id)) retryPool.push(q);
-        if (!mistakes.includes(q.id)) mistakes.push(q.id);
+        if (!retryPool.some(item => item.id === currentQuestion.id)) retryPool.push(currentQuestion);
+        if (!mistakes.includes(currentQuestion.id)) mistakes.push(currentQuestion.id);
       }
 
       setTimeout(() => {
@@ -128,7 +147,7 @@
       const total = questions.length;
       const correct = Object.keys(answeredLog).length;
       const score = Math.floor((correct / total) * 100);
-      const elapsed = Math.floor((Date.now() - startTime) / 1000); // in seconds
+      const elapsed = Math.floor((Date.now() - startTime) / 1000); // seconds
       const minutes = Math.floor(elapsed / 60);
       const seconds = elapsed % 60;
 
@@ -144,12 +163,13 @@
       const resultData = {
         score: score,
         mistakes: mistakes,
-        timeTaken: elapsed  // 秒数で保存（例：125）
+        timeTaken: elapsed
       };
       localStorage.setItem(`${user}_lesson1`, JSON.stringify(resultData));
     }
 
     showQuestion();
   </script>
+
 </body>
 </html>
