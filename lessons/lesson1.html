@@ -36,14 +36,8 @@
       cursor: pointer;
     }
 
-    .choices button:hover {
-      background: #eef;
-    }
-
-    .result {
-      font-weight: bold;
-      margin-top: 10px;
-    }
+    .choices button:hover { background: #eef; }
+    .result { font-weight: bold; margin-top: 10px; }
 
     #sentence-box {
       background: #fff8dc;
@@ -107,16 +101,11 @@
 
       document.getElementById("sentence-box").innerText = currentQuestion.sentence || "";
 
-      // シャッフル処理
-      const indexedChoices = currentQuestion.choices.map((choice, i) => ({
-        index: i,
-        text: choice
-      }));
+      const indexedChoices = currentQuestion.choices.map((choice, i) => ({ index: i, text: choice }));
       const shuffled = shuffle(indexedChoices);
       shuffledChoices = shuffled.map(c => c.text);
       correctIndex = shuffled.findIndex(c => c.index === currentQuestion.answer);
 
-      // 表示
       let html = `<h3>${currentQuestion.question}</h3><div class="choices">`;
       shuffledChoices.forEach((choice, i) => {
         html += `<button onclick="checkAnswer(${i})">${choice}</button>`;
@@ -145,9 +134,9 @@
 
     function showResult() {
       const total = questions.length;
-      const correct = Object.keys(answeredLog).length;
-      const score = Math.floor((correct / total) * 100);
-      const elapsed = Math.floor((Date.now() - startTime) / 1000); // seconds
+      const firstTryCorrect = total - mistakes.length;
+      const score = Math.floor((firstTryCorrect / total) * 100);
+      const elapsed = Math.floor((Date.now() - startTime) / 1000);
       const minutes = Math.floor(elapsed / 60);
       const seconds = elapsed % 60;
 
@@ -165,11 +154,4 @@
         mistakes: mistakes,
         timeTaken: elapsed
       };
-      localStorage.setItem(`${user}_lesson1`, JSON.stringify(resultData));
-    }
-
-    showQuestion();
-  </script>
-
-</body>
-</html>
+      localStorag
