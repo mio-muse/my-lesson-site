@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My English Lessons</title>
+  <style>
+    body { font-family: sans-serif; max-width: 700px; margin: auto; padding: 20px; }
+    h1, h2 { color: #2c3e50; }
+    .lesson-list { margin-top: 20px; }
+    .lesson { margin-bottom: 15px; }
+    input { padding: 8px; font-size: 1em; margin-bottom: 10px; }
+  </style>
+</head>
+<body>
+
+  <h1>📘 English Learning Course</h1>
+
+  <label for="username">Enter your name:</label><br>
+  <input type="text" id="username" placeholder="Your name">
+  <button onclick="saveUsername()">Start</button>
+
+  <div id="welcome" style="display:none;">
+    <h2>Welcome, <span id="user-name"></span>!</h2>
+    <p>Your lesson progress:</p>
+    <div class="lesson-list" id="lesson-list"></div>
+  </div>
+
+  <script>
+    const lessons = [
+      { id: "lesson1", title: "🧠 Brain Overload Reading", link: "lessons/lesson1.html" },
+      { id: "lesson2", title: "🕒 Present Simple Tense", link: "lessons/lesson2.html" },
+      { id: "lesson3", title: "📱 Technology Vocabulary", link: "lessons/lesson3.html" }
+    ];
+
+    function saveUsername() {
+      const name = document.getElementById("username").value.trim();
+      if (!name) return alert("Please enter your name.");
+      localStorage.setItem("lesson_username", name);
+      loadUserProgress();
+    }
+
+    function loadUserProgress() {
+      const user = localStorage.getItem("lesson_username");
+      if (!user) return;
+
+      document.getElementById("user-name").textContent = user;
+      document.getElementById("welcome").style.display = "block";
+
+      const listDiv = document.getElementById("lesson-list");
+      listDiv.innerHTML = "";
+
+      lessons.forEach(lesson => {
+        const userData = JSON.parse(localStorage.getItem(`${user}_${lesson.id}`)) || {};
+        const score = userData.score !== undefined ? `${userData.score}%` : "Not started";
+        const mistakes = userData.mistakes ? userData.mistakes.length : 0;
+
+        const html = `
+          <div class="lesson">
+            <a href="${lesson.link}">${lesson.title}</a><br>
+            🔢 Score: ${score} | ❌ Mistakes: ${mistakes}
+          </div>
+        `;
+        listDiv.innerHTML += html;
+      });
+    }
+
+    // 自動読み込み
+    window.onload = loadUserProgress;
+  </script>
+
+</body>
+</html>
