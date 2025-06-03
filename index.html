@@ -5,11 +5,17 @@
   <title>My English Lessons</title>
   <style>
     body {
-      font-family: 'Calibri', Calibri;
-      background-color: #ffffad;
-      margin: 0;
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: auto;
+      line-height: 1.6;
       padding: 20px;
-      color: #2c3e50;
+      background-image: url("background.png");
+      background-size: cover;         /* 拡大して表示 */
+      background-repeat: no-repeat;
+      background-attachment: fixed;   /* スクロール時も固定 */
+      background-position: center;    /* 中央に配置 */
+      background-color: #f9f9f9;
     }
 
     h1 {
@@ -36,7 +42,7 @@
       font-size: 1em;
       border: none;
       border-radius: 6px;
-      background-color: #bf794e;
+      background-color: #3498db;
       color: white;
       cursor: pointer;
     }
@@ -95,7 +101,7 @@
 </head>
 <body>
 
-  <h1><img src="L2title.png", height="250"></h1>
+  <h1>📘 English Learning Course</h1>
 
   <div id="user-input">
     <label for="username">Enter your name:</label><br>
@@ -104,16 +110,16 @@
   </div>
 
   <div id="welcome" style="display:none;">
-    <h2><center><font style="Calibri">Hello, <span id="user-name"></span>!</h2>
-    <p><center>Your lesson progress:</p>
-    <div class="lesson-list" id="lesson-list"></div></center>
+    <h2>Hello, <span id="user-name"></span>!</h2>
+    <p>Your lesson progress:</p>
+    <div class="lesson-list" id="lesson-list"></div>
   </div>
 
   <script>
     const lessons = [
-      { id: "lesson1", title: "1st Paragraph", link: "lessons/lesson1.html" },
-    　　 { id: "lesson2", title: "2nd Paragraph", link: "lessons/lesson2.html" },
-      { id: "lesson3", title: "3rd Paragraph", link: "lessons/lesson3.html" }
+      { id: "lesson1", title: "🧠 Brain Overload Reading", link: "lessons/lesson1.html" },
+      { id: "lesson2", title: "🕒 Present Simple Tense", link: "lessons/lesson2.html" },
+      { id: "lesson3", title: "📱 Technology Vocabulary", link: "lessons/lesson3.html" }
     ];
 
     function saveUsername() {
