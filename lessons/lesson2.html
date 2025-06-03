@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lesson 2: Vocabulary & Comprehension</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: auto;
+      line-height: 1.6;
+      padding: 20px;
+      background-image: url("background.png");
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-position: center;
+      background-color: #f9f9f9;
+    }
+
+    .question { margin-top: 20px; }
+    .choices {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .choices button {
+      flex: 1 1 45%;
+      padding: 15px;
+      font-size: 1.1em;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      background: #fff;
+      cursor: pointer;
+    }
+
+    .choices button:hover { background: #eef; }
+    .result { font-weight: bold; margin-top: 10px; }
+
+    #sentence-box {
+      background: #fff8dc;
+      padding: 10px;
+      border-left: 5px solid #ffa500;
+      border-radius: 6px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>📖 Lesson 2: Vocabulary & Comprehension</h1>
+  <div id="sentence-box"></div>
+  <div class="question" id="quiz-container"></div>
+  <div class="result" id="result"></div>
+
+  <script>
+    const questions = [
+      { id: 1, question: "What does 'indicate' mean?", choices: ["〜を予測する", "〜を示す", "〜を隠す", "〜を決める"], answer: 1, sentence: "The blue parts indicate that cerebral blood flow has decreased and that brain functions are impaired." },
+      { id: 2, question: "What does 'impair' mean?", choices: ["〜を向上させる", "〜を弱める", "〜を修復する", "〜を活発にする"], answer: 1, sentence: "The blue parts indicate that cerebral blood flow has decreased and that brain functions are impaired." },
+      { id: 3, question: "What does 'recover' mean?", choices: ["悪化する", "無視する", "続く", "回復する"], answer: 3, sentence: "The right one shows that brain dysfunction has almost recovered after reducing the use of a smartphone. " },
+      { id: 4, question: "What does 'analysis' mean?", choices: ["観察", "分析", "実験結果", "記録"], answer: 1, sentence: "This analysis of brain function images demonstrates that overusing smartphones has a negative effect on our brains." },
+      { id: 5, question: "What does 'demonstrate' mean?", choices: ["〜を否定する", "〜を消す", "〜を実証する", "〜を演じる"], answer: 2, sentence: "This analysis of brain function images demonstrates that overusing smartphones has a negative effect on our brains. " },
+      { id: 6, question: "What does the first brain scan in the textbook show?", choices: ["The brain is healthy and normal.", "The person does not used a smartphone.", "Brain function had decreased due to smartphone use.", "The brain had recovered after resting."], answer: 2, sentence: "　The concept of brain overload is clearly supported by scientific research.  Figure 1 displays two images of the same patient’s brain.  The left image shows the brain has cognitive dysfunction from using a smartphone more than five hours a day.  The blue parts indicate that cerebral blood flow has decreased and that brain functions are impaired.  The right one shows that brain dysfunction has almost recovered after reducing the use of a smartphone.  This analysis of brain function images demonstrates that overusing smartphones has a negative effect on our brains.  It is also said that more young people are suffering from cognitive dysfunction.  A doctor at a memory clinic reports, 'In the past, most of my patients were elderly people, but these days, about 40% are in their 30s to 50s.'" },
+      { id: 7, question: "What caused the brain to get better?", choices: ["Eating healthy food", "Using the phone for work only", "Using the smartphone less", "Taking medicine"], answer: 2, sentence: "The concept of brain overload is clearly supported by scientific research.  Figure 1 displays two images of the same patient’s brain.  The left image shows the brain has cognitive dysfunction from using a smartphone more than five hours a day.  The blue parts indicate that cerebral blood flow has decreased and that brain functions are impaired.  The right one shows that brain dysfunction has almost recovered after reducing the use of a smartphone.  This analysis of brain function images demonstrates that overusing smartphones has a negative effect on our brains.  It is also said that more young people are suffering from cognitive dysfunction.  A doctor at a memory clinic reports, 'In the past, most of my patients were elderly people, but these days, about 40% are in their 30s to 50s.'" }
+      { id: 8, question: "What new trend does the doctor mention?", choices: ["Young people are less interested in smartphones.", "More elderly people are visiting clinics.", "More people in their 30s to 50s have brain problems.", "Fewer people are using memory clinics."], answer: 2, sentence: "The concept of brain overload is clearly supported by scientific research.  Figure 1 displays two images of the same patient’s brain.  The left image shows the brain has cognitive dysfunction from using a smartphone more than five hours a day.  The blue parts indicate that cerebral blood flow has decreased and that brain functions are impaired.  The right one shows that brain dysfunction has almost recovered after reducing the use of a smartphone.  This analysis of brain function images demonstrates that overusing smartphones has a negative effect on our brains.  It is also said that more young people are suffering from cognitive dysfunction.  A doctor at a memory clinic reports, 'In the past, most of my patients were elderly people, but these days, about 40% are in their 30s to 50s.'" }
+    ];
+
+    let mainPool = [...questions];
+    let retryPool = [];
+    let answeredLog = {};
+    let mistakes = [];
+    let currentQuestion = null;
+    let shuffledChoices = [];
+    let correctIndex = -1;
+    let startTime = Date.now();
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    function getNextQuestion() {
+      if (mainPool.length > 0) return mainPool.shift();
+      const retryCandidates = retryPool.filter(q => !answeredLog[q.id]);
+      if (retryCandidates.length > 0) {
+        return retryCandidates[Math.floor(Math.random() * retryCandidates.length)];
+      }
+      return null;
+    }
+
+    function showQuestion() {
+      currentQuestion = getNextQuestion();
+      if (!currentQuestion) {
+        showResult();
+        return;
+      }
+
+      document.getElementById("sentence-box").innerText = currentQuestion.sentence || "";
+
+      const indexedChoices = currentQuestion.choices.map((choice, i) => ({ index: i, text: choice }));
+      const shuffled = shuffle(indexedChoices);
+      shuffledChoices = shuffled.map(c => c.text);
+      correctIndex = shuffled.findIndex(c => c.index === currentQuestion.answer);
+
+      let html = `<h3>${currentQuestion.question}</h3><div class="choices">`;
+      shuffledChoices.forEach((choice, i) => {
+        html += `<button onclick="checkAnswer(${i})">${choice}</button>`;
+      });
+      html += `</div>`;
+      document.getElementById("quiz-container").innerHTML = html;
+    }
+
+    function checkAnswer(selected) {
+      const resultDiv = document.getElementById("result");
+
+      if (selected === correctIndex) {
+        answeredLog[currentQuestion.id] = true;
+        resultDiv.innerText = "✅ Correct!";
+      } else {
+        resultDiv.innerText = "❌ Incorrect. It will appear again.";
+        if (!retryPool.some(item => item.id === currentQuestion.id)) retryPool.push(currentQuestion);
+        if (!mistakes.includes(currentQuestion.id)) mistakes.push(currentQuestion.id);
+      }
+
+      setTimeout(() => {
+        resultDiv.innerText = "";
+        showQuestion();
+      }, 1000);
+    }
+
+    function showResult() {
+      const total = questions.length;
+      const firstTryCorrect = total - mistakes.length;
+      const score = Math.floor((firstTryCorrect / total) * 100);
+      const elapsed = Math.floor((Date.now() - startTime) / 1000);
+      const minutes = Math.floor(elapsed / 60);
+      const seconds = elapsed % 60;
+
+      document.getElementById("quiz-container").innerHTML = `
+        <h2>🎉 You completed the lesson!</h2>
+        <p>✅ Score: ${score}%</p>
+        <p>❌ Mistakes: ${mistakes.length} question(s)</p>
+        <p>⏱️ Time: ${minutes}m ${seconds}s</p>
+        <a href="../index.html">🔙 Back to Top</a>
+      `;
+
+      const user = localStorage.getItem("lesson_username") || "default";
+      const resultData = {
+        score: score,
+        mistakes: mistakes,
+        timeTaken: elapsed
+      };
+      localStorage.setItem(`${user}_lesson1`, JSON.stringify(resultData));
+    }
+
+    showQuestion();
+  </script>
+
+</body>
+</html>
