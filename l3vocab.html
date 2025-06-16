@@ -19,19 +19,54 @@
 
     const allQuestions = [
       {
-        question: "What is the synonym of 'big'?",
-        options: ["small", "huge", "thin", "quiet"],
+        question: "Choose the correct meaning of 'wrap'",
+        options: ["～を取り替える", "～を包む", "～を投げる", "～を育てる"],
         answer: 1
       },
       {
-        question: "What is the antonym of 'happy'?",
-        options: ["joyful", "excited", "sad", "smile"],
+        question: "Choose the correct meaning of 'individually'",
+        options: ["急に", "簡単に", "個々に", "優しく"],
         answer: 2
       },
       {
-        question: "Choose the correct spelling:",
-        options: ["enviroment", "environment", "envirenment", "enviornment"],
+        question: "Choose the correct meaning of 'consideration'",
+        options: ["計画", "検査", "思いやり", "注文"],
+        answer: 2
+      },
+      {
+        question: "Choose the correct meaning of 'storage'",
+        options: ["運搬", "再利用", "保管", "貯金"],
+        answer: 2
+      },
+      {
+        question: "Choose the correct meaning of 'banquet'",
+        options: ["休憩", "パーティー", "宴", "お菓子"],
+        answer: 2
+      },
+      {
+        question: "Choose the correct meaning of 'thoughtfulness'",
+        options: ["思いやり", "幸運", "満足", "誤解"],
+        answer: 0
+      },
+      {
+        question: "Choose the correct meaning of 'impolite'",
+        options: ["勇敢な", "楽しい", "素早い", "無作法な"],
+        answer: 3
+      },
+      {
+        question: "Choose the correct meaning of 'warm-hearted'",
+        options: ["おしゃべりな", "親切な", "冷たい", "落ち着いた"],
         answer: 1
+      },
+      {
+        question: "Choose the correct meaning of 'unwrap'",
+        options: ["〜を切る", "〜を開封する", "〜を壊す", "〜を捨てる"],
+        answer: 1
+      },
+      {
+        question: "Choose the correct meaning of 'growing'",
+        options: ["増大する", "減っている", "落ちている", "固まっている"],
+        answer: 0
       }
     ];
 
@@ -43,6 +78,8 @@
     let firstAttemptScore = null;
     let startTime = Date.now();
     let answered = false;
+    let perfectAchieved = false;
+    let perfectTimeSec = 0;
 
     const container = document.getElementById("quiz-container");
     const resultBox = document.getElementById("result");
@@ -61,7 +98,6 @@
       answered = false;
       const q = questions[current];
 
-      // 選択肢シャッフル + 正解インデックスの変換
       const originalOptions = q.options.map((opt, i) => ({
         text: opt,
         isCorrect: i === q.answer
@@ -92,7 +128,7 @@
           } else {
             incorrect++;
             resultBox.textContent = "❌ Incorrect.";
-            incorrectQuestions.push(q); // 間違えた問題を記録
+            incorrectQuestions.push(q);
           }
 
           document.querySelectorAll(".option-button").forEach(btn => btn.disabled = true);
@@ -111,8 +147,8 @@
     }
 
     function finishQuiz() {
-      const endTime = Date.now();
-      const elapsedSec = Math.floor((endTime - startTime) / 1000);
+      const now = Date.now();
+      const elapsedSec = Math.floor((now - startTime) / 1000);
       const initialScorePercent = Math.round((score / (score + incorrect)) * 100);
 
       if (firstAttemptScore === null) {
@@ -121,21 +157,27 @@
       }
 
       if (incorrectQuestions.length === 0) {
+        // ✅ 初めてパーフェクト達成した瞬間の時間を記録
+        if (!perfectAchieved) {
+          perfectAchieved = true;
+          perfectTimeSec = elapsedSec;
+
+          localStorage.setItem(`${username}_vocab_time`, perfectTimeSec);
+
+          let ranking = JSON.parse(localStorage.getItem("vocab_ranking") || "[]");
+          ranking.push({ name: username, score: firstAttemptScore, time: perfectTimeSec });
+          localStorage.setItem("vocab_ranking", JSON.stringify(ranking));
+        }
+
         container.innerHTML = `<h2>🎉 Perfect! Quiz complete!</h2>`;
-        resultBox.textContent = `Score: ${firstAttemptScore}%, Time: ${elapsedSec} sec`;
-
-        localStorage.setItem(`${username}_vocab_time`, elapsedSec);
-
-        let ranking = JSON.parse(localStorage.getItem("vocab_ranking") || "[]");
-        ranking.push({ name: username, score: firstAttemptScore, time: elapsedSec });
-        localStorage.setItem("vocab_ranking", JSON.stringify(ranking));
+        resultBox.textContent = `Score: ${firstAttemptScore}%, Time: ${perfectTimeSec} sec`;
 
         setTimeout(() => {
           window.location.href = "l3.html";
         }, 2000);
       } else {
-        // 間違えた問題だけで再試行
         alert(`You missed ${incorrectQuestions.length} question(s). Let's try again.`);
+
         questions = [...incorrectQuestions];
         incorrectQuestions = [];
         current = 0;
