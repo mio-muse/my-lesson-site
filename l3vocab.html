@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>L.3 - Vocabulary Quiz</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <h1>L.3 - Vocabulary Course</h1>
+  <p id="usernameDisplay"></p>
+
+  <div id="quiz-container"></div>
+  <button id="nextBtn" style="display:none;" onclick="quiz.nextQuestion()">Next</button>
+  <p id="result"></p>
+
+  <script type="module">
+    import { Quiz } from './js/quiz.js';
+
+    // ユーザー名表示
+    const username = localStorage.getItem("username") || "Guest";
+    document.getElementById("usernameDisplay").textContent = `Logged in as: ${username}`;
+
+    // クイズ問題定義（自由に編集可能）
+    const questions = [
+      {
+        question: "What is the synonym of 'big'?",
+        options: ["small", "huge", "thin", "quiet"],
+        answer: 1
+      },
+      {
+        question: "What is the antonym of 'happy'?",
+        options: ["joyful", "excited", "sad", "smile"],
+        answer: 2
+      },
+      {
+        question: "Choose the correct spelling:",
+        options: ["enviroment", "environment", "envirenment", "enviornment"],
+        answer: 1
+      }
+    ];
+
+    // クイズ開始
+    window.quiz = new Quiz({
+      containerId: "quiz-container",
+      resultId: "result",
+      nextButtonId: "nextBtn",
+      questions: questions,
+      courseKey: "vocab"  // 成績保存に使われるキー
+    });
+  </script>
+</body>
+</html>
