@@ -1,0 +1,24 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login</title>
+  <meta charset="UTF-8">
+</head>
+<body>
+  <h1>Enter Password</h1>
+  <input type="password" id="password" />
+  <button onclick="checkPassword()">Enter</button>
+
+  <script>
+    function checkPassword() {
+      const pass = document.getElementById('password').value;
+      if (pass === 'duo123') {
+        window.location.href = 'index2.html';
+      } else {
+        alert('Wrong password!');
+      }
+    }
+  </script>
+</body>
+</html>

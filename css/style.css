@@ -1,0 +1,96 @@
+/* General layout */
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #f6f8fa;
+  color: #333;
+  padding: 20px;
+  margin: 0;
+}
+
+h1, h2, h3 {
+  color: #2c3e50;
+}
+
+a {
+  color: #2c7be5;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+input[type="text"],
+input[type="password"] {
+  padding: 8px;
+  width: 200px;
+  font-size: 16px;
+  margin-right: 10px;
+}
+
+button {
+  padding: 8px 14px;
+  background-color: #2c7be5;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+}
+button:hover {
+  background-color: #1a5fcc;
+}
+
+.section {
+  background: white;
+  padding: 15px;
+  margin-top: 25px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+/* Quiz layout */
+.question {
+  margin-bottom: 20px;
+}
+.question button {
+  display: block;
+  width: 100%;
+  max-width: 300px;
+  margin: 8px 0;
+  text-align: left;
+}
+
+/* Result display */
+#result {
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+/* Ranking table */
+.ranking-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+.ranking-table th, .ranking-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+.ranking-table th {
+  background-color: #f2f2f2;
+  color: #2c3e50;
+}
+
+/* Responsive */
+@media screen and (max-width: 600px) {
+  input[type="text"],
+  input[type="password"] {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .question button {
+    font-size: 14px;
+  }
+}

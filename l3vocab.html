@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Vocabulary Quiz</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    .question { margin-bottom: 20px; }
+    button { display: block; margin: 10px 0; }
+  </style>
+</head>
+<body>
+  <h1>Vocabulary Quiz</h1>
+  <p id="username"></p>
+  <div id="quiz-container"></div>
+  <button id="nextBtn" style="display:none;" onclick="nextQuestion()">Next</button>
+  <p id="result"></p>
+
+  <script>
+    const username = localStorage.getItem("username") || "Guest";
+    document.getElementById("username").textContent = `Logged in as: ${username}`;
+
+    const questions = [
+      {
+        question: "What is the synonym of 'big'?",
+        options: ["small", "huge", "thin", "quiet"],
+        answer: 1
+      },
+      {
+        question: "What is the antonym of 'happy'?",
+        options: ["joyful", "excited", "sad", "smile"],
+        answer: 2
+      },
+      {
+        question: "Choose the correct spelling:",
+        options: ["enviroment", "environment", "envirenment", "enviornment"],
+        answer: 1
+      }
+    ];
+
+    let current = 0;
+    let score = 0;
+    let incorrect = 0;
+    let startTime = Date.now();
+    let firstAttemptScore = null;
+
+    function showQuestion() {
+      const q = questions[current];
+      const container = document.getElementById("quiz-container");
+      container.innerHTML = `<div class="question">
+        <strong>Q${current + 1}: ${q.question}</strong><br>
+        ${q.options.map((opt, i) =>
+          `<button onclick="checkAnswer(${i})">${opt}</button>`).join("")}
+      </div>`;
+      document.getElementById("nextBtn").style.display = "none";
+      document.getElementById("result").textContent = "";
+    }
+
+    function checkAnswer(selected) {
+      const correct = questions[current].answer;
+      if (selected === correct) {
+        score++;
+        document.getElementById("result").textContent = "✅ Correct!";
+      } else {
+        incorrect++;
+        document.getElementById("result").textContent = "❌ Incorrect.";
+      }
+
+      document.querySelectorAll("button").forEach(btn => btn.disabled = true);
+      document.getElementById("nextBtn").style.display = "inline-block";
+    }
+
+    function nextQuestion() {
+      current++;
+      if (current < questions.length) {
+        showQuestion();
+      } else {
+        finishQuiz();
+      }
+    }
+
+    function finishQuiz() {
+      const endTime = Date.now();
+      const elapsedSec = Math.floor((endTime - startTime) / 1000);
+      const initialScorePercent = Math.round((score / questions.length) * 100);
+
+      if (score === questions.length) {
+        document.getElementById("quiz-container").innerHTML = "<h2>🎉 Perfect! Quiz complete!</h2>";
+        document.getElementById("result").textContent = `Score: ${initialScorePercent}%, Time: ${elapsedSec} sec`;
+
+        // スコアを保存
+        localStorage.setItem(`${username}_vocab_score`, initialScorePercent);
+        localStorage.setItem(`${username}_vocab_time`, elapsedSec);
+
+        // ランキング追加
+        let ranking = JSON.parse(localStorage.getItem("vocab_ranking") || "[]");
+        ranking.push({ name: username, score: initialScorePercent, time: elapsedSec });
+        localStorage.setItem("vocab_ranking", JSON.stringify(ranking));
+      } else {
+        alert("You must answer all questions correctly. Try again!");
+        // 初回スコア保存（1回目だけ記録）
+        if (firstAttemptScore === null) {
+          firstAttemptScore = Math.round((score / questions.length) * 100);
+          localStorage.setItem(`${username}_vocab_score`, firstAttemptScore);
+        }
+        // やり直し
+        current = 0;
+        score = 0;
+        incorrect = 0;
+        startTime = Date.now();
+        showQuestion();
+      }
+    }
+
+    showQuestion();
+  </script>
+</body>
+</html>
