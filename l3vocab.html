@@ -1,138 +1,164 @@
-<script type="module">
-  const username = localStorage.getItem("username") || "Guest";
-  document.getElementById("usernameDisplay").textContent = `Logged in as: ${username}`;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>L.3 - Vocabulary Quiz</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <h1>L.3 - Vocabulary Course</h1>
+  <p id="usernameDisplay"></p>
 
-  const allQuestions = [
-    { question: "Choose the correct meaning of 'wrap'", options: ["～を取り替える", "～を包む", "～を投げる", "～を育てる"], answer: 1 },
-    { question: "Choose the correct meaning of 'individually'", options: ["急に", "簡単に", "個々に", "優しく"], answer: 2 },
-    { question: "Choose the correct meaning of 'consideration'", options: ["計画", "検査", "思いやり", "注文"], answer: 2 },
-    { question: "Choose the correct meaning of 'storage'", options: ["運搬", "再利用", "保管", "貯金"], answer: 2 },
-    { question: "Choose the correct meaning of 'banquet'", options: ["休憩", "パーティー", "宴", "お菓子"], answer: 2 },
-    { question: "Choose the correct meaning of 'thoughtfulness'", options: ["思いやり", "幸運", "満足", "誤解"], answer: 0 },
-    { question: "Choose the correct meaning of 'impolite'", options: ["勇敢な", "楽しい", "素早い", "無作法な"], answer: 3 },
-    { question: "Choose the correct meaning of 'warm-hearted'", options: ["おしゃべりな", "親切な", "冷たい", "落ち着いた"], answer: 1 },
-    { question: "Choose the correct meaning of 'unwrap'", options: ["〜を切る", "〜を開封する", "〜を壊す", "〜を捨てる"], answer: 1 },
-    { question: "Choose the correct meaning of 'growing'", options: ["増大する", "減っている", "落ちている", "固まっている"], answer: 0 },
-    { question: "Choose the correct meaning of 'restrict'", options: ["〜を促す", "〜を延長する", "〜を楽しむ", "〜を制限する"], answer: 3 },
-    { question: "Choose the correct meaning of 'ban'", options: ["〜を禁止する", "〜を祝う", "〜を保存する", "〜を奨励する"], answer: 0 }
-  ];
+  <div id="quiz-container"></div>
+  <button id="nextBtn" style="display:none;">Next</button>
+  <p id="result"></p>
 
-  function shuffle(array) {
-    return array
-      .map(value => ({ value, sort: Math.random() }))
-      .sort((a, b) => a.sort - b.sort)
-      .map(({ value }) => value);
-  }
+  <script type="module">
+    const username = localStorage.getItem("username") || "Guest";
+    document.getElementById("usernameDisplay").textContent = `Logged in as: ${username}`;
 
-  let current = 0;
-  let questions = shuffle([...allQuestions]); // ✅ 問題の順番をシャッフル！
-  let incorrectQuestions = [];
-  let score = 0;
-  let incorrect = 0;
-  let firstAttemptScore = null;
-  let startTime = Date.now();
-  let answered = false;
-  let perfectAchieved = false;
-  let perfectTimeSec = 0;
+    const allQuestions = [
+      { question: "Choose the correct meaning of 'wrap'", options: ["～を取り替える", "～を包む", "～を投げる", "～を育てる"], answer: 1 },
+      { question: "Choose the correct meaning of 'individually'", options: ["急に", "簡単に", "個々に", "優しく"], answer: 2 },
+      { question: "Choose the correct meaning of 'consideration'", options: ["計画", "検査", "思いやり", "注文"], answer: 2 },
+      { question: "Choose the correct meaning of 'storage'", options: ["運搬", "再利用", "保管", "貯金"], answer: 2 },
+      { question: "Choose the correct meaning of 'banquet'", options: ["休憩", "パーティー", "宴", "お菓子"], answer: 2 },
+      { question: "Choose the correct meaning of 'thoughtfulness'", options: ["思いやり", "幸運", "満足", "誤解"], answer: 0 },
+      { question: "Choose the correct meaning of 'impolite'", options: ["勇敢な", "楽しい", "素早い", "無作法な"], answer: 3 },
+      { question: "Choose the correct meaning of 'warm-hearted'", options: ["おしゃべりな", "親切な", "冷たい", "落ち着いた"], answer: 1 },
+      { question: "Choose the correct meaning of 'unwrap'", options: ["〜を切る", "〜を開封する", "〜を壊す", "〜を捨てる"], answer: 1 },
+      { question: "Choose the correct meaning of 'growing'", options: ["増大する", "減っている", "落ちている", "固まっている"], answer: 0 },
+      { question: "Choose the correct meaning of 'restrict'", options: ["〜を促す", "〜を延長する", "〜を楽しむ", "〜を制限する"], answer: 3 },
+      { question: "Choose the correct meaning of 'ban'", options: ["〜を禁止する", "〜を祝う", "〜を保存する", "〜を奨励する"], answer: 0 }
+    ];
 
-  const container = document.getElementById("quiz-container");
-  const resultBox = document.getElementById("result");
-  const nextBtn = document.getElementById("nextBtn");
-
-  nextBtn.addEventListener("click", () => nextQuestion());
-
-  function showQuestion() {
-    answered = false;
-    const q = questions[current];
-
-    const originalOptions = q.options.map((opt, i) => ({
-      text: opt,
-      isCorrect: i === q.answer
-    }));
-    const shuffledOptions = shuffle(originalOptions);
-
-    container.innerHTML = `
-      <div class="question">
-        <strong>Q${current + 1}: ${q.question}</strong><br>
-        ${shuffledOptions.map((opt) =>
-          `<button data-correct="${opt.isCorrect}" class="option-button">${opt.text}</button>`
-        ).join("")}
-      </div>
-    `;
-
-    resultBox.textContent = "";
-    nextBtn.style.display = "none";
-
-    document.querySelectorAll(".option-button").forEach(button => {
-      button.addEventListener("click", () => {
-        if (answered) return;
-        answered = true;
-
-        const isCorrect = button.dataset.correct === "true";
-        if (isCorrect) {
-          score++;
-          resultBox.textContent = "✅ Correct!";
-        } else {
-          incorrect++;
-          resultBox.textContent = "❌ Incorrect.";
-          incorrectQuestions.push(q);
-        }
-
-        document.querySelectorAll(".option-button").forEach(btn => btn.disabled = true);
-        nextBtn.style.display = "inline-block";
-      });
-    });
-  }
-
-  function nextQuestion() {
-    current++;
-    if (current < questions.length) {
-      showQuestion();
-    } else {
-      finishQuiz();
-    }
-  }
-
-  function finishQuiz() {
-    const now = Date.now();
-    const elapsedSec = Math.floor((now - startTime) / 1000);
-    const initialScorePercent = Math.round((score / (score + incorrect)) * 100);
-
-    if (firstAttemptScore === null) {
-      firstAttemptScore = initialScorePercent;
-      localStorage.setItem(`${username}_vocab_score`, initialScorePercent);
+    function shuffle(array) {
+      return array
+        .map(value => ({ value, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(({ value }) => value);
     }
 
-    if (incorrectQuestions.length === 0) {
-      if (!perfectAchieved) {
-        perfectAchieved = true;
-        perfectTimeSec = elapsedSec;
+    let questions = [];
+    let current = 0;
+    let incorrectQuestions = [];
+    let score = 0;
+    let incorrect = 0;
+    let firstAttemptScore = null;
+    let startTime = Date.now();
+    let answered = false;
+    let perfectAchieved = false;
+    let perfectTimeSec = 0;
 
-        localStorage.setItem(`${username}_vocab_time`, perfectTimeSec);
+    const container = document.getElementById("quiz-container");
+    const resultBox = document.getElementById("result");
+    const nextBtn = document.getElementById("nextBtn");
 
-        let ranking = JSON.parse(localStorage.getItem("vocab_ranking") || "[]");
-        ranking.push({ name: username, score: firstAttemptScore, time: perfectTimeSec });
-        localStorage.setItem("vocab_ranking", JSON.stringify(ranking));
-      }
+    nextBtn.addEventListener("click", () => nextQuestion());
 
-      container.innerHTML = `<h2>🎉 Perfect! Quiz complete!</h2>`;
-      resultBox.textContent = `Score: ${firstAttemptScore}%, Time: ${perfectTimeSec} sec`;
-
-      setTimeout(() => {
-        window.location.href = "l3.html";
-      }, 2000);
-    } else {
-      alert(`You missed ${incorrectQuestions.length} question(s). Let's try again.`);
-
-      questions = shuffle([...incorrectQuestions]);  // ❗️ここもシャッフルして再出題！
-      incorrectQuestions = [];
+    function startQuiz() {
+      questions = shuffle([...allQuestions]);
       current = 0;
       score = 0;
       incorrect = 0;
+      incorrectQuestions = [];
       startTime = Date.now();
       showQuestion();
     }
-  }
 
-  showQuestion();
-</script>
+    function showQuestion() {
+      answered = false;
+      const q = questions[current];
+
+      const originalOptions = q.options.map((opt, i) => ({
+        text: opt,
+        isCorrect: i === q.answer
+      }));
+      const shuffledOptions = shuffle(originalOptions);
+
+      container.innerHTML = `
+        <div class="question">
+          <strong>Q${current + 1}: ${q.question}</strong><br>
+          ${shuffledOptions.map((opt) =>
+            `<button data-correct="${opt.isCorrect}" class="option-button">${opt.text}</button>`
+          ).join("")}
+        </div>
+      `;
+
+      resultBox.textContent = "";
+      nextBtn.style.display = "none";
+
+      document.querySelectorAll(".option-button").forEach(button => {
+        button.addEventListener("click", () => {
+          if (answered) return;
+          answered = true;
+
+          const isCorrect = button.dataset.correct === "true";
+          if (isCorrect) {
+            score++;
+            resultBox.textContent = "✅ Correct!";
+          } else {
+            incorrect++;
+            resultBox.textContent = "❌ Incorrect.";
+            incorrectQuestions.push(q);
+          }
+
+          document.querySelectorAll(".option-button").forEach(btn => btn.disabled = true);
+          nextBtn.style.display = "inline-block";
+        });
+      });
+    }
+
+    function nextQuestion() {
+      current++;
+      if (current < questions.length) {
+        showQuestion();
+      } else {
+        finishQuiz();
+      }
+    }
+
+    function finishQuiz() {
+      const now = Date.now();
+      const elapsedSec = Math.floor((now - startTime) / 1000);
+      const initialScorePercent = Math.round((score / (score + incorrect)) * 100);
+
+      if (firstAttemptScore === null) {
+        firstAttemptScore = initialScorePercent;
+        localStorage.setItem(`${username}_vocab_score`, initialScorePercent);
+      }
+
+      if (incorrectQuestions.length === 0) {
+        if (!perfectAchieved) {
+          perfectAchieved = true;
+          perfectTimeSec = elapsedSec;
+
+          localStorage.setItem(`${username}_vocab_time`, perfectTimeSec);
+
+          let ranking = JSON.parse(localStorage.getItem("vocab_ranking") || "[]");
+          ranking.push({ name: username, score: firstAttemptScore, time: perfectTimeSec });
+          localStorage.setItem("vocab_ranking", JSON.stringify(ranking));
+        }
+
+        container.innerHTML = `<h2>🎉 Perfect! Quiz complete!</h2>`;
+        resultBox.textContent = `Score: ${firstAttemptScore}%, Time: ${perfectTimeSec} sec`;
+
+        setTimeout(() => {
+          window.location.href = "l3.html";
+        }, 2000);
+      } else {
+        alert(`You missed ${incorrectQuestions.length} question(s). Let's try again.`);
+        questions = shuffle([...incorrectQuestions]);
+        incorrectQuestions = [];
+        current = 0;
+        score = 0;
+        incorrect = 0;
+        startTime = Date.now();
+        showQuestion();
+      }
+    }
+
+    startQuiz(); // ✅ 最初に呼び出し
+  </script>
+</body>
+</html>
