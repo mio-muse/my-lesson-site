@@ -37,8 +37,18 @@ function shuffle(array) {
 
 // --- Vocabulary Quiz ---
 const allVocabQuestions = [
-  { question: "Choose the correct meaning of 'wrap'", options: ["～を取り替える", "～を包む", "～を投げる", "～を育てる"], answer: 1 },
-  { question: "Choose the correct meaning of 'ban'", options: ["〜を禁止する", "〜を祝う", "〜を保存する", "〜を奨励する"], answer: 0 },
+{ question: "Choose the correct meaning of 'wrap'", options: ["～を取り替える", "～を包む", "～を投げる", "～を育てる"], answer: 1 },
+ { question: "Choose the correct meaning of 'individually'", options: ["急に", "簡単に", "個々に", "優しく"], answer: 2 },
+ { question: "Choose the correct meaning of 'consideration'", options: ["計画", "検査", "思いやり", "注文"], answer: 2 },
+ { question: "Choose the correct meaning of 'storage'", options: ["運搬", "再利用", "保管", "貯金"], answer: 2 },
+ { question: "Choose the correct meaning of 'banquet'", options: ["休憩", "パーティー", "宴", "お菓子"], answer: 2 },
+ { question: "Choose the correct meaning of 'thoughtfulness'", options: ["思いやり", "幸運", "満足", "誤解"], answer: 0 }
+ { question: "Choose the correct meaning of 'impolite'", options: ["勇敢な", "楽しい", "素早い", "無作法な"], answer: 3 },
+ { question: "Choose the correct meaning of 'warm-hearted'", options: ["おしゃべりな", "親切な", "冷たい", "落ち着いた"], answer: 1 },
+ { question: "Choose the correct meaning of 'unwrap'", options: ["〜を切る", "〜を開封する", "〜を壊す", "〜を捨てる"], answer: 1 },
+ { question: "Choose the correct meaning of 'growing'", options: ["増大する", "減っている", "落ちている", "固まっている"], answer: 0 },
+ { question: "Choose the correct meaning of 'restrict'", options: ["〜を促す", "〜を延長する", "〜を楽しむ", "〜を制限する"], answer: 3 },
+ { question: "Choose the correct meaning of 'ban'", options: ["〜を禁止する", "〜を祝う", "〜を保存する", "〜を奨励する"], answer: 0 }
 ];
 let vocabQuestions = shuffle([...allVocabQuestions]);
 let current = 0;
@@ -134,13 +144,58 @@ const listeningQuestions = [
   },
   {
     sentence: "Each cookie was individually wrapped to keep it fresh.",
-    display: "Each cookie was individually ______ to keep it fresh.",
-    answer: "wrapped"
+    display: "Each cookie was ______ wrapped to keep it fresh.",
+    answer: "individually"
+  },
+  {
+    sentence: "The documents were placed in a safe storage area.",
+    display: "The documents were placed in a safe _____ area.",
+    answer: "storage"
   },
   {
     sentence: "He showed great consideration for her feelings.",
     display: "He showed great ______ for her feelings.",
     answer: "consideration"
+  },
+  {
+    sentence: "Her thoughtfulness made everyone feel welcome.",
+    display: "Her _____ made everyone feel welcome.",
+    answer: "thoughtfulness"
+  },
+  {
+    sentence: "The wedding banquet was held in a large hall.",
+    display: "The wedding _____ was held in a large hall.",
+    answer: "banquet"
+  },
+  {
+    sentence: "It is impolite to talk during a performance.",
+    display: "It is _____ to talk during a performance.",
+    answer: "impolite"
+  },
+  {
+    sentence: "Please unwrap the gift carefully.",
+    display: "Please _____ the gift carefully.",
+    answer: "unwrap"
+  },
+  {
+    sentence: "He is known for being warm-hearted and generous.",
+    display: "He is known for being _____ and generous.",
+    answer: "warm-hearted"
+  },
+  {
+    sentence: "There is a growing interest in renewable energy.",
+    display: "There is a _____ interest in renewable energy.",
+    answer: "growing"
+  },
+  {
+    sentence: "The school decided to restrict phone usage during classes.",
+    display: "The school decided to _____ phone usage during classes.",
+    answer: "restrict"
+  },
+  {
+    sentence: "Smoking is banned in all public buildings.",
+    display: "Smoking is _____ in all public buildings.",
+    answer: "banned"
   }
 ];
 
