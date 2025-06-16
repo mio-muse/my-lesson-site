@@ -19,7 +19,7 @@
   <!-- Listening Quiz Section (hidden by default) -->
   <section id="listening-quiz-section" style="display:none;">
     <div id="listening-container"></div>
-    <input id="dictationInput" type="text" placeholder="Type what you hear...">
+    <input id="dictationInput" type="text" placeholder="Type the missing word...">
     <button id="replayAudio">🔈</button>
     <button id="checkDictation">Check</button>
     <p id="dictationResult"></p>
@@ -127,12 +127,23 @@ function finishVocabQuiz() {
 
 // --- Listening Quiz ---
 const listeningQuestions = [
-  "Thank you for coming today.",
-  "I'm very happy to be here with you.",
-  "I'm from Osaka in Japan.",
-  "I belong to the English Speaking Society.",
-  "Today, I’ll talk about Japanese food."
+  {
+    sentence: "She used colorful paper to wrap the present.",
+    display: "She used colorful paper to ______ the present.",
+    answer: "wrap"
+  },
+  {
+    sentence: "Each cookie was individually wrapped to keep it fresh.",
+    display: "Each cookie was individually ______ to keep it fresh.",
+    answer: "wrapped"
+  },
+  {
+    sentence: "He showed great consideration for her feelings.",
+    display: "He showed great ______ for her feelings.",
+    answer: "consideration"
+  }
 ];
+
 let currentListening = 0;
 
 function speak(text) {
@@ -147,25 +158,21 @@ function startListeningQuiz() {
 }
 
 function showListeningQuestion() {
-  const text = listeningQuestions[currentListening];
-  document.getElementById("listening-container").textContent = `Q${currentListening + 1}: Listen and type what you hear.`;
+  const q = listeningQuestions[currentListening];
+  document.getElementById("listening-container").textContent = `Q${currentListening + 1}: ${q.display}`;
   document.getElementById("dictationInput").value = "";
   document.getElementById("dictationResult").textContent = "";
-  speak(text);
-}
-
-function normalize(str) {
-  return str.toLowerCase().replace(/[\.,!?]/g, '').trim();
+  speak(q.sentence);
 }
 
 document.getElementById("replayAudio").addEventListener("click", () => {
-  speak(listeningQuestions[currentListening]);
+  speak(listeningQuestions[currentListening].sentence);
 });
 
 document.getElementById("checkDictation").addEventListener("click", () => {
-  const input = normalize(document.getElementById("dictationInput").value);
-  const answer = normalize(listeningQuestions[currentListening]);
-  if (input === answer) {
+  const input = document.getElementById("dictationInput").value.trim().toLowerCase();
+  const correct = listeningQuestions[currentListening].answer.toLowerCase();
+  if (input === correct) {
     currentListening++;
     if (currentListening < listeningQuestions.length) {
       showListeningQuestion();
