@@ -26,6 +26,26 @@
   </section>
 
 <script>
+let voices = [];
+window.speechSynthesis.onvoiceschanged = () => {
+  voices = speechSynthesis.getVoices();
+};
+
+function speak(text) {
+  const utter = new SpeechSynthesisUtterance(text);
+  // "Samantha" を優先（iOS・Macによくある英語音声）
+  const englishVoice = voices.find(voice => voice.lang === "en-US" && voice.name.includes("Samantha")) ||
+                       voices.find(voice => voice.lang === "en-US");
+
+  if (englishVoice) {
+    utter.voice = englishVoice;
+  } else {
+    utter.lang = "en-US"; // fallback用
+  }
+
+  speechSynthesis.speak(utter);
+}
+
 const username = localStorage.getItem("username") || "Guest";
 document.getElementById("usernameDisplay").textContent = `Logged in as: ${username}`;
 
@@ -202,12 +222,6 @@ let listeningQuestions = shuffle([...allListeningQuestions]);
 let currentListening = 0;
 let incorrectListeningQuestions = [];
 let listeningStartTime;
-
-function speak(text) {
-  const utter = new SpeechSynthesisUtterance(text);
-  utter.lang = "en-US";
-  speechSynthesis.speak(utter);
-}
 
 function startListeningQuiz() {
   listeningQuestions = shuffle([...allListeningQuestions]);
