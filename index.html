@@ -13,12 +13,20 @@
   <script>
     function checkPassword() {
       const pass = document.getElementById('password').value;
-      if (pass === 'duo123') {
+      if (pass === 'S3-2025') {
         window.location.href = 'index2.html';
       } else {
         alert('Wrong password!');
       }
     }
+
+// Enterキーでもチェックできるようにする
+document.getElementById("dictationInput").addEventListener("keypress", function (e) {
+  if (e.key === "Enter") {
+    document.getElementById("checkDictation").click();
+  }
+});
+
   </script>
 </body>
 </html>
