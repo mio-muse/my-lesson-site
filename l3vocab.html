@@ -16,7 +16,7 @@
     <p id="result"></p>
   </section>
 
-  <!-- Listening Quiz Section (hidden by default) -->
+  <!-- Listening Quiz Section -->
   <section id="listening-quiz-section" style="display:none;">
     <div id="listening-container"></div>
     <input id="dictationInput" type="text" placeholder="Type the missing word...">
@@ -35,7 +35,7 @@ function shuffle(array) {
               .map(({ value }) => value);
 }
 
-// --- Vocabulary Quiz ---
+// ---------------- Vocabulary Quiz ----------------
 const allVocabQuestions = [
 { question: "Choose the correct meaning of 'wrap'", options: ["～を取り替える", "～を包む", "～を投げる", "～を育てる"], answer: 1 },
  { question: "Choose the correct meaning of 'individually'", options: ["急に", "簡単に", "個々に", "優しく"], answer: 2 },
@@ -135,8 +135,7 @@ function finishVocabQuiz() {
   }
 }
 
-// --- Listening Quiz ---
-// ✅ Listening問題の出題順ランダム化 & 間違いはやり直し方式 & 正解時に✅表示
+// ---------------- Listening Quiz ----------------
 let allListeningQuestions = [
   {
     sentence: "She used colorful paper to wrap the present.",
@@ -199,10 +198,10 @@ let allListeningQuestions = [
     answer: "banned"
   }
 ];
-
 let listeningQuestions = shuffle([...allListeningQuestions]);
 let currentListening = 0;
 let incorrectListeningQuestions = [];
+let listeningStartTime;
 
 function speak(text) {
   const utter = new SpeechSynthesisUtterance(text);
@@ -211,11 +210,11 @@ function speak(text) {
 }
 
 function startListeningQuiz() {
-  document.getElementById("listening-quiz-section").style.display = "block";
-  listeningStartTime = Date.now(); // ← 開始時間を記録
   listeningQuestions = shuffle([...allListeningQuestions]);
   incorrectListeningQuestions = [];
   currentListening = 0;
+  listeningStartTime = Date.now();
+  document.getElementById("listening-quiz-section").style.display = "block";
   showListeningQuestion();
 }
 
@@ -234,18 +233,24 @@ document.getElementById("replayAudio").addEventListener("click", () => {
 document.getElementById("checkDictation").addEventListener("click", () => {
   const input = document.getElementById("dictationInput").value.trim().toLowerCase();
   const correct = listeningQuestions[currentListening].answer.toLowerCase();
+
   if (input === correct) {
     document.getElementById("dictationResult").textContent = "✅ Correct!";
     currentListening++;
+
     if (currentListening < listeningQuestions.length) {
       setTimeout(showListeningQuestion, 1000);
     } else if (incorrectListeningQuestions.length > 0) {
-      alert("Some were incorrect. Retrying those.");
+      alert("Retrying incorrect questions.");
       listeningQuestions = shuffle([...incorrectListeningQuestions]);
       incorrectListeningQuestions = [];
       currentListening = 0;
       setTimeout(showListeningQuestion, 1000);
     } else {
+      const listeningTime = Math.floor((Date.now() - listeningStartTime) / 1000);
+      const vocabTime = parseInt(localStorage.getItem(`${username}_vocab_time`) || "0");
+      localStorage.setItem(`${username}_listening_time`, listeningTime);
+      localStorage.setItem(`${username}_total_time`, vocabTime + listeningTime);
       document.getElementById("dictationResult").textContent = "🎉 Perfect! Listening quiz complete!";
       setTimeout(() => window.location.href = "l3.html", 2000);
     }
@@ -253,6 +258,7 @@ document.getElementById("checkDictation").addEventListener("click", () => {
     document.getElementById("dictationResult").textContent = "❌ Incorrect. Try again.";
     incorrectListeningQuestions.push(listeningQuestions[currentListening]);
     currentListening++;
+
     if (currentListening < listeningQuestions.length) {
       setTimeout(showListeningQuestion, 1000);
     } else {
@@ -262,35 +268,6 @@ document.getElementById("checkDictation").addEventListener("click", () => {
       currentListening = 0;
       setTimeout(showListeningQuestion, 1000);
     }
-if (input === correct) {
-  currentListening++;
-  document.getElementById("dictationResult").textContent = "✅ Correct!";
-  if (currentListening < listeningQuestions.length) {
-    showListeningQuestion();
-  } else if (incorrectListeningQuestions.length > 0) {
-    alert("Retrying incorrect questions.");
-    listeningQuestions = shuffle([...incorrectListeningQuestions]);
-    incorrectListeningQuestions = [];
-    currentListening = 0;
-    showListeningQuestion();
-  } else {
-    if (!perfectListening) {
-      const listeningTimeSec = Math.floor((Date.now() - listeningStartTime) / 1000);
-      localStorage.setItem(`${username}_listening_time`, listeningTimeSec); // ✅ 保存！
-      perfectListening = true;
-    }
-// ✅ 合計時間を保存
-　　const vocabTime = parseInt(localStorage.getItem(`${username}_vocab_time`) || "0");
-　　const listeningTime = Math.floor((Date.now() - listeningStartTime) / 1000);
-　　localStorage.setItem(`${username}_listening_time`, listeningTime);
-　　localStorage.setItem(`${username}_total_time`, vocabTime + listeningTime);
-
-    document.getElementById("dictationResult").textContent = "🎉 Perfect! Listening quiz complete!";
-    setTimeout(() => window.location.href = "l3.html", 2000);
-  }
-} else {
-  document.getElementById("dictationResult").textContent = "❌ Incorrect. Try again.";
-  incorrectListeningQuestions.push(listeningQuestions[currentListening]);
   }
 });
 
