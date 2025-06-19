@@ -194,16 +194,62 @@ let listeningQuestions = shuffle([...allListeningQuestions]);
 let currentListening = 0;
 let incorrectListeningQuestions = [];
 
-function speak(text) { ... }
+function speak(text) {
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = "en-US";
+  speechSynthesis.speak(utter);
+}
 
-function startListeningQuiz() { ... }
+function startListeningQuiz() {
+  document.getElementById("listening-quiz-section").style.display = "block";
+  showListeningQuestion();
+}
 
-function showListeningQuestion() { ... }
+function showListeningQuestion() {
+  const q = listeningQuestions[currentListening];
+  document.getElementById("listening-container").textContent = `Q${currentListening + 1}: ${q.display}`;
+  document.getElementById("dictationInput").value = "";
+  document.getElementById("dictationResult").textContent = "";
+  speak(q.sentence);
+}
 
-document.getElementById("replayAudio").addEventListener(...);
+document.getElementById("replayAudio").addEventListener("click", () => {
+  speak(listeningQuestions[currentListening].sentence);
+});
 
-document.getElementById("checkDictation").addEventListener(...);
-
+document.getElementById("checkDictation").addEventListener("click", () => {
+  const input = document.getElementById("dictationInput").value.trim().toLowerCase();
+  const correct = listeningQuestions[currentListening].answer.toLowerCase();
+  if (input === correct) {
+    document.getElementById("dictationResult").textContent = "✅ Correct!";
+    currentListening++;
+    if (currentListening < listeningQuestions.length) {
+      setTimeout(showListeningQuestion, 1000);
+    } else if (incorrectListeningQuestions.length > 0) {
+      alert("Some were incorrect. Retrying those.");
+      listeningQuestions = shuffle([...incorrectListeningQuestions]);
+      incorrectListeningQuestions = [];
+      currentListening = 0;
+      setTimeout(showListeningQuestion, 1000);
+    } else {
+      document.getElementById("dictationResult").textContent = "🎉 Perfect! Listening quiz complete!";
+      setTimeout(() => window.location.href = "l3.html", 2000);
+    }
+  } else {
+    document.getElementById("dictationResult").textContent = "❌ Incorrect. Try again.";
+    incorrectListeningQuestions.push(listeningQuestions[currentListening]);
+    currentListening++;
+    if (currentListening < listeningQuestions.length) {
+      setTimeout(showListeningQuestion, 1000);
+    } else {
+      alert("Retrying incorrect answers.");
+      listeningQuestions = shuffle([...incorrectListeningQuestions]);
+      incorrectListeningQuestions = [];
+      currentListening = 0;
+      setTimeout(showListeningQuestion, 1000);
+    }
+  }
+});
 
 showVocabQuestion();
 </script>
