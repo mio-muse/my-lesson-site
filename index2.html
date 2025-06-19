@@ -3,13 +3,56 @@
 <head>
   <meta charset="UTF-8">
   <title>Select Course</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 50px;
+      font-family: sans-serif;
+    }
+
+    h1, h2 {
+      font-size: 1.5rem;
+      text-align: center;
+    }
+
+    input, button {
+      font-size: 1.2rem;
+      padding: 10px;
+      width: 80%;
+      max-width: 300px;
+      margin: 10px auto;
+      display: block;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    li {
+      margin: 10px 0;
+    }
+
+    a {
+      font-size: 1.2rem;
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
   <h1>Welcome to the Learning Course</h1>
 
   <label for="username">Enter your name:</label>
   <input type="text" id="username" placeholder="Your name" />
-  <button onclick="saveUsername()">Start</button>
+  <button id="startBtn">Start</button>
 
   <div id="course-links" style="display:none; margin-top: 20px;">
     <h2>Choose a Course</h2>
@@ -30,7 +73,13 @@
       document.getElementById('course-links').style.display = 'block';
     }
 
-    // 自動で名前が保存されていればリンクを表示
+    document.getElementById("startBtn").addEventListener("click", saveUsername);
+    document.getElementById("username").addEventListener("keypress", function (e) {
+      if (e.key === "Enter") {
+        saveUsername();
+      }
+    });
+
     window.onload = function () {
       const savedName = localStorage.getItem('username');
       if (savedName) {
