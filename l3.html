@@ -26,15 +26,9 @@
     const totalTime = localStorage.getItem(`${username}_total_time`);
 
     document.getElementById("vocabResults").innerHTML = `
-      <p><strong>Vocabulary Score:</strong> ${vocabScore ?? "-"}%</p>
-      <p><strong>Vocabulary Time:</strong> ${vocabTime ?? "-"} sec</p>
+      <p><strong>Score:</strong> ${vocabScore ?? "-"}%</p>
+      <p><strong>Time:</strong> ${vocabTime ?? "-"} sec</p>
     `;
-
-    document.getElementById("listeningResults").innerHTML = `
-      <p><strong>Listening Time:</strong> ${listeningTime ?? "-"} sec</p>
-    `;
-
-    document.getElementById("totalTime").textContent = totalTime ?? "-";
   </script>
 </body>
 </html>
