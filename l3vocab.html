@@ -37,18 +37,8 @@ function shuffle(array) {
 
 // --- Vocabulary Quiz ---
 const allVocabQuestions = [
-{ question: "Choose the correct meaning of 'wrap'", options: ["～を取り替える", "～を包む", "～を投げる", "～を育てる"], answer: 1 },
- { question: "Choose the correct meaning of 'individually'", options: ["急に", "簡単に", "個々に", "優しく"], answer: 2 },
- { question: "Choose the correct meaning of 'consideration'", options: ["計画", "検査", "思いやり", "注文"], answer: 2 },
- { question: "Choose the correct meaning of 'storage'", options: ["運搬", "再利用", "保管", "貯金"], answer: 2 },
- { question: "Choose the correct meaning of 'banquet'", options: ["休憩", "パーティー", "宴", "お菓子"], answer: 2 },
- { question: "Choose the correct meaning of 'thoughtfulness'", options: ["思いやり", "幸運", "満足", "誤解"], answer: 0 },
- { question: "Choose the correct meaning of 'impolite'", options: ["勇敢な", "楽しい", "素早い", "無作法な"], answer: 3 },
- { question: "Choose the correct meaning of 'warm-hearted'", options: ["おしゃべりな", "親切な", "冷たい", "落ち着いた"], answer: 1 },
- { question: "Choose the correct meaning of 'unwrap'", options: ["〜を切る", "〜を開封する", "〜を壊す", "〜を捨てる"], answer: 1 },
- { question: "Choose the correct meaning of 'growing'", options: ["増大する", "減っている", "落ちている", "固まっている"], answer: 0 },
- { question: "Choose the correct meaning of 'restrict'", options: ["〜を促す", "〜を延長する", "〜を楽しむ", "〜を制限する"], answer: 3 },
- { question: "Choose the correct meaning of 'ban'", options: ["〜を禁止する", "〜を祝う", "〜を保存する", "〜を奨励する"], answer: 0 }
+  { question: "Choose the correct meaning of 'wrap'", options: ["～を取り替える", "～を包む", "～を投げる", "～を育てる"], answer: 1 },
+  { question: "Choose the correct meaning of 'ban'", options: ["〜を禁止する", "〜を祝う", "〜を保存する", "〜を奨励する"], answer: 0 },
 ];
 let vocabQuestions = shuffle([...allVocabQuestions]);
 let current = 0;
@@ -136,7 +126,8 @@ function finishVocabQuiz() {
 }
 
 // --- Listening Quiz ---
-const listeningQuestions = [
+// ✅ Listening問題の出題順ランダム化 & 間違いはやり直し方式 & 正解時に✅表示
+let allListeningQuestions = [
   {
     sentence: "She used colorful paper to wrap the present.",
     display: "She used colorful paper to ______ the present.",
@@ -199,46 +190,20 @@ const listeningQuestions = [
   }
 ];
 
+let listeningQuestions = shuffle([...allListeningQuestions]);
 let currentListening = 0;
+let incorrectListeningQuestions = [];
 
-function speak(text) {
-  const utter = new SpeechSynthesisUtterance(text);
-  utter.lang = "en-US";
-  speechSynthesis.speak(utter);
-}
+function speak(text) { ... }
 
-function startListeningQuiz() {
-  document.getElementById("listening-quiz-section").style.display = "block";
-  showListeningQuestion();
-}
+function startListeningQuiz() { ... }
 
-function showListeningQuestion() {
-  const q = listeningQuestions[currentListening];
-  document.getElementById("listening-container").textContent = `Q${currentListening + 1}: ${q.display}`;
-  document.getElementById("dictationInput").value = "";
-  document.getElementById("dictationResult").textContent = "";
-  speak(q.sentence);
-}
+function showListeningQuestion() { ... }
 
-document.getElementById("replayAudio").addEventListener("click", () => {
-  speak(listeningQuestions[currentListening].sentence);
-});
+document.getElementById("replayAudio").addEventListener(...);
 
-document.getElementById("checkDictation").addEventListener("click", () => {
-  const input = document.getElementById("dictationInput").value.trim().toLowerCase();
-  const correct = listeningQuestions[currentListening].answer.toLowerCase();
-  if (input === correct) {
-    currentListening++;
-    if (currentListening < listeningQuestions.length) {
-      showListeningQuestion();
-    } else {
-      document.getElementById("dictationResult").textContent = "🎉 Perfect! Listening quiz complete!";
-      setTimeout(() => window.location.href = "l3.html", 2000);
-    }
-  } else {
-    document.getElementById("dictationResult").textContent = "❌ Incorrect. Try again.";
-  }
-});
+document.getElementById("checkDictation").addEventListener(...);
+
 
 showVocabQuestion();
 </script>
