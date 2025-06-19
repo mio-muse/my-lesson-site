@@ -1,14 +1,37 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html>
 <head>
   <title>Login</title>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    input, button {
+      font-size: 1.2rem;
+      padding: 10px;
+      width: 80%;
+      max-width: 300px;
+      margin: 10px auto;
+      display: block;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      text-align: center;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 50px;
+      font-family: sans-serif;
+    }
+  </style>
 </head>
 <body>
   <h1>Enter Password</h1>
   <input type="password" id="password" />
-  <button onclick="checkPassword()">Enter</button>
+  <button id="enterBtn">Enter</button>
 
   <script>
     function checkPassword() {
@@ -20,13 +43,14 @@
       }
     }
 
-// Enterキーでもチェックできるようにする
-document.getElementById("dictationInput").addEventListener("keypress", function (e) {
-  if (e.key === "Enter") {
-    document.getElementById("checkDictation").click();
-  }
-});
-
+    window.onload = function () {
+      document.getElementById("enterBtn").addEventListener("click", checkPassword);
+      document.getElementById("password").addEventListener("keypress", function (e) {
+        if (e.key === "Enter") {
+          checkPassword();
+        }
+      });
+    };
   </script>
 </body>
 </html>
