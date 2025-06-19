@@ -212,6 +212,10 @@ function speak(text) {
 
 function startListeningQuiz() {
   document.getElementById("listening-quiz-section").style.display = "block";
+  listeningStartTime = Date.now(); // ← 開始時間を記録
+  listeningQuestions = shuffle([...allListeningQuestions]);
+  incorrectListeningQuestions = [];
+  currentListening = 0;
   showListeningQuestion();
 }
 
@@ -258,6 +262,29 @@ document.getElementById("checkDictation").addEventListener("click", () => {
       currentListening = 0;
       setTimeout(showListeningQuestion, 1000);
     }
+if (input === correct) {
+  currentListening++;
+  document.getElementById("dictationResult").textContent = "✅ Correct!";
+  if (currentListening < listeningQuestions.length) {
+    showListeningQuestion();
+  } else if (incorrectListeningQuestions.length > 0) {
+    alert("Retrying incorrect questions.");
+    listeningQuestions = shuffle([...incorrectListeningQuestions]);
+    incorrectListeningQuestions = [];
+    currentListening = 0;
+    showListeningQuestion();
+  } else {
+    if (!perfectListening) {
+      const listeningTimeSec = Math.floor((Date.now() - listeningStartTime) / 1000);
+      localStorage.setItem(`${username}_listening_time`, listeningTimeSec); // ✅ 保存！
+      perfectListening = true;
+    }
+    document.getElementById("dictationResult").textContent = "🎉 Perfect! Listening quiz complete!";
+    setTimeout(() => window.location.href = "l3.html", 2000);
+  }
+} else {
+  document.getElementById("dictationResult").textContent = "❌ Incorrect. Try again.";
+  incorrectListeningQuestions.push(listeningQuestions[currentListening]);
   }
 });
 
