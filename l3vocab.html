@@ -37,8 +37,18 @@ function shuffle(array) {
 
 // --- Vocabulary Quiz ---
 const allVocabQuestions = [
-  { question: "Choose the correct meaning of 'wrap'", options: ["～を取り替える", "～を包む", "～を投げる", "～を育てる"], answer: 1 },
-  { question: "Choose the correct meaning of 'ban'", options: ["〜を禁止する", "〜を祝う", "〜を保存する", "〜を奨励する"], answer: 0 },
+{ question: "Choose the correct meaning of 'wrap'", options: ["～を取り替える", "～を包む", "～を投げる", "～を育てる"], answer: 1 },
+ { question: "Choose the correct meaning of 'individually'", options: ["急に", "簡単に", "個々に", "優しく"], answer: 2 },
+ { question: "Choose the correct meaning of 'consideration'", options: ["計画", "検査", "思いやり", "注文"], answer: 2 },
+ { question: "Choose the correct meaning of 'storage'", options: ["運搬", "再利用", "保管", "貯金"], answer: 2 },
+ { question: "Choose the correct meaning of 'banquet'", options: ["休憩", "パーティー", "宴", "お菓子"], answer: 2 },
+ { question: "Choose the correct meaning of 'thoughtfulness'", options: ["思いやり", "幸運", "満足", "誤解"], answer: 0 },
+ { question: "Choose the correct meaning of 'impolite'", options: ["勇敢な", "楽しい", "素早い", "無作法な"], answer: 3 },
+ { question: "Choose the correct meaning of 'warm-hearted'", options: ["おしゃべりな", "親切な", "冷たい", "落ち着いた"], answer: 1 },
+ { question: "Choose the correct meaning of 'unwrap'", options: ["〜を切る", "〜を開封する", "〜を壊す", "〜を捨てる"], answer: 1 },
+ { question: "Choose the correct meaning of 'growing'", options: ["増大する", "減っている", "落ちている", "固まっている"], answer: 0 },
+ { question: "Choose the correct meaning of 'restrict'", options: ["〜を促す", "〜を延長する", "〜を楽しむ", "〜を制限する"], answer: 3 },
+ { question: "Choose the correct meaning of 'ban'", options: ["〜を禁止する", "〜を祝う", "〜を保存する", "〜を奨励する"], answer: 0 }
 ];
 let vocabQuestions = shuffle([...allVocabQuestions]);
 let current = 0;
