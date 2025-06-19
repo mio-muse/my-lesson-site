@@ -9,25 +9,30 @@
   <h1>L.3 Learning Course</h1>
   <p id="usernameDisplay"></p>
 
-  <h2>Vocabulary Course</h2>
-  <a href="l3vocab.html">Go to Vocabulary Course</a>
-  <div id="vocabResults">
-    <p><strong>Score:</strong> -</p>
-    <p><strong>Time:</strong> - sec</p>
+  <h2>Vocabulary & Listening Course</h2>
+  <a href="l3vocab.html">Go to Vocabulary & Listening Course</a>
+
+  <div id="courseResults">
+    <p><strong>Total Score (1st attempt):</strong> <span id="totalScore">-</span>%</p>
+    <p><strong>Total Time:</strong> <span id="totalTime">-</span> sec</p>
   </div>
 
   <script>
     const username = localStorage.getItem("username") || "Guest";
     document.getElementById("usernameDisplay").textContent = `Logged in as: ${username}`;
 
-    const vocabScore = localStorage.getItem(`${username}_vocab_score`);
-    const vocabTime = localStorage.getItem(`${username}_vocab_time`);
-    const listeningTime = localStorage.getItem(`${username}_listening_time`);
-    const totalTime = localStorage.getItem(`${username}_total_time`);
+    const vocabScore = parseInt(localStorage.getItem(`${username}_vocab_score`));
+    const vocabTime = parseInt(localStorage.getItem(`${username}_vocab_time`));
+    const listeningTime = parseInt(localStorage.getItem(`${username}_listening_time`));
+    const totalTime = parseInt(localStorage.getItem(`${username}_total_time`));
 
-    document.getElementById("vocabResults").innerHTML = `
-      <p><strong>Score:</strong> ${vocabScore ?? "-"}%</p>
-      <p><strong>Time:</strong> ${vocabTime ?? "-"} sec</p>
+    const totalQuestions = 12 + 12; // 12 vocabulary + 12 listening questions
+    const totalCorrect = Math.round((vocabScore / 100) * 12) + 12; // listening is always 100% in final step
+
+    const totalScore = Math.round((totalCorrect / totalQuestions) * 100);
+
+    document.getElementById("totalScore").textContent = !isNaN(totalScore) ? totalScore : "-";
+    document.getElementById("totalTime").textContent = !isNaN(totalTime) ? totalTime : "-";
   </script>
 </body>
 </html>
