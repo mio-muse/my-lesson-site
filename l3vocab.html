@@ -279,6 +279,12 @@ if (input === correct) {
       localStorage.setItem(`${username}_listening_time`, listeningTimeSec); // ✅ 保存！
       perfectListening = true;
     }
+// ✅ 合計時間を保存
+　　const vocabTime = parseInt(localStorage.getItem(`${username}_vocab_time`) || "0");
+　　const listeningTime = Math.floor((Date.now() - listeningStartTime) / 1000);
+　　localStorage.setItem(`${username}_listening_time`, listeningTime);
+　　localStorage.setItem(`${username}_total_time`, vocabTime + listeningTime);
+
     document.getElementById("dictationResult").textContent = "🎉 Perfect! Listening quiz complete!";
     setTimeout(() => window.location.href = "l3.html", 2000);
   }

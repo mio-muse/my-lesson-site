@@ -24,17 +24,18 @@
   </div>
 
   <script>
-   const username = localStorage.getItem("username") || "Guest";
-   const vocabTime = parseInt(localStorage.getItem(`${username}_vocab_time`) || "0");
-   const listeningTime = parseInt(localStorage.getItem(`${username}_listening_time`) || "0");
-   const totalTime = vocabTime + listeningTime;
+<script>
+const username = localStorage.getItem("username") || "Guest";
+const totalTime = localStorage.getItem(`${username}_total_time`);
 
-   document.getElementById("vocabTimeDisplay").textContent = `Vocabulary Time: ${vocabTime} seconds`;
-   document.getElementById("listeningTimeDisplay").textContent = `Listening Time: ${listeningTime}seconds`;
-   document.getElementById("totalTimeDisplay").textContent = `Total Time: ${totalTime} seconds`;
+if (totalTime !== null) {
+  document.getElementById("totalTimeResult").textContent =
+    `⏱️ Total Time: ${totalTime} seconds`;
+} else {
+  document.getElementById("totalTimeResult").textContent =
+    "⏱️ Total Time: Not yet recorded.";
+}
 
-    showUserResult("vocab");
-    showUserResult("grammar");
   </script>
 </body>
 </html>
