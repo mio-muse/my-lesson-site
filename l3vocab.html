@@ -1,297 +1,389 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>L.3 - Vocabulary & Listening</title>
-  <link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L3 Vocabulary Course</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #f7f9fc;
+            font-family: 'Nunito', sans-serif;
+            min-height: 100vh;
+        }
+        .option-card {
+            transition: all 0.2s ease;
+        }
+        .option-card:hover {
+            transform: translateY(-2px);
+        }
+        .option-card.selected {
+            border-color: #3b82f6;
+            background-color: #eff6ff;
+        }
+        .option-card.correct {
+            border-color: #10b981;
+            background-color: #d1fae5;
+        }
+        .option-card.incorrect {
+            border-color: #ef4444;
+            background-color: #fee2e2;
+        }
+        .progress-bar {
+            transition: width 0.5s ease;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .pulse {
+            animation: pulse 1s infinite;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <h1>L.3 - Vocabulary & Listening</h1>
-  <p id="usernameDisplay"></p>
+    <header class="bg-[#58cc02] text-white shadow-md">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center">
+                <h1 class="text-2xl font-bold">L3 Vocabulary</h1>
+            </div>
+            <div class="flex items-center">
+                <span id="usernameDisplay" class="mr-4 font-semibold"></span>
+                <a href="l3.html" class="bg-white text-[#58cc02] px-4 py-2 rounded-lg font-bold hover:bg-gray-100 transition">Back to L3</a>
+            </div>
+        </div>
+    </header>
 
-  <!-- Vocabulary Quiz Section -->
-  <section id="vocab-quiz-section">
-    <div id="quiz-container"></div>
-    <button id="nextBtn" style="display:none;">Next</button>
-    <p id="result"></p>
-  </section>
+    <main class="container mx-auto px-4 py-8">
+        <!-- Progress Bar -->
+        <div class="bg-gray-200 rounded-full h-4 mb-8">
+            <div id="progressBar" class="bg-blue-500 h-4 rounded-full progress-bar" style="width: 0%"></div>
+        </div>
+        
+        <!-- Timer and Score -->
+        <div class="flex justify-between mb-8">
+            <div class="bg-white rounded-lg shadow-md p-4 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span id="timer" class="text-xl font-bold">00:00</span>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-4 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span id="score" class="text-xl font-bold">0 / 0</span>
+            </div>
+        </div>
+        
+        <!-- Question Container -->
+        <div id="questionContainer" class="bg-white rounded-xl shadow-md p-6 mb-8">
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">Question <span id="questionNumber">1</span></h2>
+                <p id="questionText" class="text-lg text-gray-700">Loading question...</p>
+            </div>
+            
+            <!-- Audio Player (if applicable) -->
+            <div id="audioContainer" class="mb-6 hidden">
+                <button id="playAudioBtn" class="flex items-center justify-center bg-blue-100 hover:bg-blue-200 text-blue-800 font-bold py-3 px-6 rounded-lg transition w-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Play Audio
+                </button>
+                <audio id="questionAudio" src="" preload="auto"></audio>
+            </div>
+            
+            <!-- Options -->
+            <div id="optionsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="option-card border-2 border-gray-200 rounded-lg p-4 cursor-pointer" data-option="0">
+                    <p class="text-lg">Option 1</p>
+                </div>
+                <div class="option-card border-2 border-gray-200 rounded-lg p-4 cursor-pointer" data-option="1">
+                    <p class="text-lg">Option 2</p>
+                </div>
+                <div class="option-card border-2 border-gray-200 rounded-lg p-4 cursor-pointer" data-option="2">
+                    <p class="text-lg">Option 3</p>
+                </div>
+                <div class="option-card border-2 border-gray-200 rounded-lg p-4 cursor-pointer" data-option="3">
+                    <p class="text-lg">Option 4</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Next Button -->
+        <button id="nextBtn" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg transition duration-200 shadow-md hover:shadow-lg hidden">
+            Next Question
+        </button>
+        
+        <!-- Results Container (initially hidden) -->
+        <div id="resultsContainer" class="bg-white rounded-xl shadow-md p-6 hidden">
+            <div class="text-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">Course Completed!</h2>
+                <p class="text-lg text-gray-700">Here are your results:</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div class="bg-blue-50 p-4 rounded-lg text-center">
+                    <p class="text-sm text-blue-600">Accuracy</p>
+                    <p id="finalAccuracy" class="text-3xl font-bold text-blue-800">--%</p>
+                </div>
+                <div class="bg-blue-50 p-4 rounded-lg text-center">
+                    <p class="text-sm text-blue-600">Completion Time</p>
+                    <p id="finalTime" class="text-3xl font-bold text-blue-800">--:--</p>
+                </div>
+            </div>
+            
+            <a href="l3.html" class="block w-full bg-[#58cc02] hover:bg-[#4aad02] text-white font-bold py-3 px-4 rounded-lg transition duration-200 text-center shadow-md hover:shadow-lg">
+                Back to L3 Course
+            </a>
+        </div>
+    </main>
 
-  <!-- Listening Quiz Section -->
-  <section id="listening-quiz-section" style="display:none;">
-    <div id="listening-container"></div>
-    <input id="dictationInput" type="text" placeholder="Type the missing word...">
-    <button id="replayAudio">🔈</button>
-    <button id="checkDictation">Check</button>
-    <p id="dictationResult"></p>
-  </section>
-
-<script>
-let voices = [];
-window.speechSynthesis.onvoiceschanged = () => {
-  voices = speechSynthesis.getVoices();
-};
-
-function speak(text) {
-  const utter = new SpeechSynthesisUtterance(text);
-  // "Samantha" を優先（iOS・Macによくある英語音声）
-  const englishVoice = voices.find(voice => voice.lang === "en-US" && voice.name.includes("Samantha")) ||
-                       voices.find(voice => voice.lang === "en-US");
-
-  if (englishVoice) {
-    utter.voice = englishVoice;
-  } else {
-    utter.lang = "en-US"; // fallback用
-  }
-
-  speechSynthesis.speak(utter);
-}
-
-const username = localStorage.getItem("username") || "Guest";
-document.getElementById("usernameDisplay").textContent = `Logged in as: ${username}`;
-
-function shuffle(array) {
-  return array.map(value => ({ value, sort: Math.random() }))
-              .sort((a, b) => a.sort - b.sort)
-              .map(({ value }) => value);
-}
-
-// ---------------- Vocabulary Quiz ----------------
-const allVocabQuestions = [
-{ question: "Choose the correct meaning of 'wrap'", options: ["～を取り替える", "～を包む", "～を投げる", "～を育てる"], answer: 1 },
- { question: "Choose the correct meaning of 'individually'", options: ["急に", "簡単に", "個々に", "優しく"], answer: 2 },
- { question: "Choose the correct meaning of 'consideration'", options: ["計画", "検査", "思いやり", "注文"], answer: 2 },
- { question: "Choose the correct meaning of 'storage'", options: ["運搬", "再利用", "保管", "貯金"], answer: 2 },
- { question: "Choose the correct meaning of 'banquet'", options: ["休憩", "パーティー", "宴", "お菓子"], answer: 2 },
- { question: "Choose the correct meaning of 'thoughtfulness'", options: ["思いやり", "幸運", "満足", "誤解"], answer: 0 },
- { question: "Choose the correct meaning of 'impolite'", options: ["勇敢な", "楽しい", "素早い", "無作法な"], answer: 3 },
- { question: "Choose the correct meaning of 'warm-hearted'", options: ["おしゃべりな", "親切な", "冷たい", "落ち着いた"], answer: 1 },
- { question: "Choose the correct meaning of 'unwrap'", options: ["〜を切る", "〜を開封する", "〜を壊す", "〜を捨てる"], answer: 1 },
- { question: "Choose the correct meaning of 'growing'", options: ["増大する", "減っている", "落ちている", "固まっている"], answer: 0 },
- { question: "Choose the correct meaning of 'restrict'", options: ["〜を促す", "〜を延長する", "〜を楽しむ", "〜を制限する"], answer: 3 },
- { question: "Choose the correct meaning of 'ban'", options: ["〜を禁止する", "〜を祝う", "〜を保存する", "〜を奨励する"], answer: 0 }
-];
-let vocabQuestions = shuffle([...allVocabQuestions]);
-let current = 0;
-let incorrectQuestions = [];
-let score = 0, incorrect = 0, answered = false;
-let startTime = Date.now();
-let firstAttemptScore = null;
-let perfectAchieved = false;
-let perfectTimeSec = 0;
-
-const container = document.getElementById("quiz-container");
-const resultBox = document.getElementById("result");
-const nextBtn = document.getElementById("nextBtn");
-
-nextBtn.addEventListener("click", nextQuestion);
-
-function showVocabQuestion() {
-  answered = false;
-  const q = vocabQuestions[current];
-  const shuffledOptions = shuffle(q.options.map((opt, i) => ({ text: opt, isCorrect: i === q.answer })));
-
-  container.innerHTML = `
-    <div class="question">
-      <strong>Q${current + 1}: ${q.question}</strong><br>
-      ${shuffledOptions.map(opt => `<button data-correct="${opt.isCorrect}" class="option-button">${opt.text}</button>`).join('')}
-    </div>
-  `;
-
-  resultBox.textContent = "";
-  nextBtn.style.display = "none";
-
-  document.querySelectorAll(".option-button").forEach(button => {
-    button.addEventListener("click", () => {
-      if (answered) return;
-      answered = true;
-      const isCorrect = button.dataset.correct === "true";
-      if (isCorrect) {
-        score++;
-        resultBox.textContent = "✅ Correct!";
-      } else {
-        incorrect++;
-        resultBox.textContent = "❌ Incorrect.";
-        incorrectQuestions.push(q);
-      }
-      document.querySelectorAll(".option-button").forEach(btn => btn.disabled = true);
-      nextBtn.style.display = "inline-block";
-    });
-  });
-}
-
-function nextQuestion() {
-  current++;
-  if (current < vocabQuestions.length) {
-    showVocabQuestion();
-  } else {
-    finishVocabQuiz();
-  }
-}
-
-function finishVocabQuiz() {
-  const elapsedSec = Math.floor((Date.now() - startTime) / 1000);
-  const initialScorePercent = Math.round((score / (score + incorrect)) * 100);
-  if (firstAttemptScore === null) {
-    firstAttemptScore = initialScorePercent;
-    localStorage.setItem(`${username}_vocab_score`, initialScorePercent);
-  }
-  if (incorrectQuestions.length === 0) {
-    if (!perfectAchieved) {
-      perfectAchieved = true;
-      perfectTimeSec = elapsedSec;
-      localStorage.setItem(`${username}_vocab_time`, perfectTimeSec);
-    }
-    document.getElementById("vocab-quiz-section").style.display = "none";
-    startListeningQuiz();
-  } else {
-    alert("Some answers were wrong. Retrying those questions.");
-    vocabQuestions = shuffle([...incorrectQuestions]);
-    incorrectQuestions = [];
-    current = 0;
-    score = 0;
-    incorrect = 0;
-    startTime = Date.now();
-    showVocabQuestion();
-  }
-}
-
-// ---------------- Listening Quiz ----------------
-let allListeningQuestions = [
-  {
-    sentence: "She used colorful paper to wrap the present.",
-    display: "She used colorful paper to ______ the present.",
-    answer: "wrap"
-  },
-  {
-    sentence: "Each cookie was individually wrapped to keep it fresh.",
-    display: "Each cookie was ______ wrapped to keep it fresh.",
-    answer: "individually"
-  },
-  {
-    sentence: "The documents were placed in a safe storage area.",
-    display: "The documents were placed in a safe _____ area.",
-    answer: "storage"
-  },
-  {
-    sentence: "He showed great consideration for her feelings.",
-    display: "He showed great ______ for her feelings.",
-    answer: "consideration"
-  },
-  {
-    sentence: "Her thoughtfulness made everyone feel welcome.",
-    display: "Her _____ made everyone feel welcome.",
-    answer: "thoughtfulness"
-  },
-  {
-    sentence: "The wedding banquet was held in a large hall.",
-    display: "The wedding _____ was held in a large hall.",
-    answer: "banquet"
-  },
-  {
-    sentence: "It is impolite to talk during a performance.",
-    display: "It is _____ to talk during a performance.",
-    answer: "impolite"
-  },
-  {
-    sentence: "Please unwrap the gift carefully.",
-    display: "Please _____ the gift carefully.",
-    answer: "unwrap"
-  },
-  {
-    sentence: "He is known for being warm-hearted and generous.",
-    display: "He is known for being _____ and generous.",
-    answer: "warm-hearted"
-  },
-  {
-    sentence: "There is a growing interest in renewable energy.",
-    display: "There is a _____ interest in renewable energy.",
-    answer: "growing"
-  },
-  {
-    sentence: "The school decided to restrict phone usage during classes.",
-    display: "The school decided to _____ phone usage during classes.",
-    answer: "restrict"
-  },
-  {
-    sentence: "Smoking is banned in all public buildings.",
-    display: "Smoking is _____ in all public buildings.",
-    answer: "banned"
-  }
-];
-let listeningQuestions = shuffle([...allListeningQuestions]);
-let currentListening = 0;
-let incorrectListeningQuestions = [];
-let listeningStartTime;
-
-function startListeningQuiz() {
-  listeningQuestions = shuffle([...allListeningQuestions]);
-  incorrectListeningQuestions = [];
-  currentListening = 0;
-  listeningStartTime = Date.now();
-  document.getElementById("listening-quiz-section").style.display = "block";
-  showListeningQuestion();
-}
-
-function showListeningQuestion() {
-  const q = listeningQuestions[currentListening];
-  document.getElementById("listening-container").textContent = `Q${currentListening + 1}: ${q.display}`;
-  document.getElementById("dictationInput").value = "";
-  document.getElementById("dictationResult").textContent = "";
-  speak(q.sentence);
-}
-
-document.getElementById("replayAudio").addEventListener("click", () => {
-  speak(listeningQuestions[currentListening].sentence);
-});
-
-document.getElementById("checkDictation").addEventListener("click", () => {
-  const input = document.getElementById("dictationInput").value.trim().toLowerCase();
-  const correct = listeningQuestions[currentListening].answer.toLowerCase();
-
-  if (input === correct) {
-    document.getElementById("dictationResult").textContent = "✅ Correct!";
-    currentListening++;
-
-    if (currentListening < listeningQuestions.length) {
-      setTimeout(showListeningQuestion, 1000);
-    } else if (incorrectListeningQuestions.length > 0) {
-      alert("Retrying incorrect questions.");
-      listeningQuestions = shuffle([...incorrectListeningQuestions]);
-      incorrectListeningQuestions = [];
-      currentListening = 0;
-      setTimeout(showListeningQuestion, 1000);
-    } else {
-      const listeningTime = Math.floor((Date.now() - listeningStartTime) / 1000);
-      const vocabTime = parseInt(localStorage.getItem(`${username}_vocab_time`) || "0");
-      localStorage.setItem(`${username}_listening_time`, listeningTime);
-      localStorage.setItem(`${username}_total_time`, vocabTime + listeningTime);
-      document.getElementById("dictationResult").textContent = "🎉 Perfect! Listening quiz complete!";
-      setTimeout(() => window.location.href = "l3.html", 2000);
-    }
-  } else {
-    document.getElementById("dictationResult").textContent = "❌ Incorrect. Try again.";
-    incorrectListeningQuestions.push(listeningQuestions[currentListening]);
-    currentListening++;
-
-    if (currentListening < listeningQuestions.length) {
-      setTimeout(showListeningQuestion, 1000);
-    } else {
-      alert("Retrying incorrect answers.");
-      listeningQuestions = shuffle([...incorrectListeningQuestions]);
-      incorrectListeningQuestions = [];
-      currentListening = 0;
-      setTimeout(showListeningQuestion, 1000);
-    }
-  }
-});
-  // Enterキーでもチェックできるようにする
-document.getElementById("dictationInput").addEventListener("keypress", function (e) {
-  if (e.key === "Enter") {
-    document.getElementById("checkDictation").click();
-  }
-});
-
-showVocabQuestion();
-</script>
+    <script>
+        // Vocabulary questions with audio
+        const questions = [
+            {
+                text: "Listen to the audio and select the correct word:",
+                audio: "l3vocab/no1.mp3",
+                options: ["Apple", "Banana", "Orange", "Grape"],
+                correctAnswer: 0
+            },
+            {
+                text: "Listen to the audio and select the correct word:",
+                audio: "l3vocab/no2.mp3",
+                options: ["Car", "Bus", "Train", "Bicycle"],
+                correctAnswer: 2
+            },
+            {
+                text: "What is the opposite of 'hot'?",
+                options: ["Warm", "Cold", "Tepid", "Boiling"],
+                correctAnswer: 1
+            },
+            {
+                text: "Listen to the audio and select the correct word:",
+                audio: "l3vocab/no3.mp3",
+                options: ["Happy", "Sad", "Angry", "Surprised"],
+                correctAnswer: 3
+            },
+            {
+                text: "Which word means 'a place where you can borrow books'?",
+                options: ["Library", "Museum", "School", "Hospital"],
+                correctAnswer: 0
+            },
+            {
+                text: "Listen to the audio and select the correct word:",
+                audio: "l3vocab/no4.mp3",
+                options: ["Mountain", "River", "Ocean", "Forest"],
+                correctAnswer: 1
+            },
+            {
+                text: "Which word means 'to prepare food by heating it'?",
+                options: ["Wash", "Cut", "Cook", "Eat"],
+                correctAnswer: 2
+            },
+            {
+                text: "Listen to the audio and select the correct word:",
+                audio: "l3vocab/no5.mp3",
+                options: ["Dog", "Cat", "Bird", "Fish"],
+                correctAnswer: 2
+            },
+            {
+                text: "What is the past tense of 'go'?",
+                options: ["Going", "Gone", "Went", "Goes"],
+                correctAnswer: 2
+            },
+            {
+                text: "Which word means 'very big'?",
+                options: ["Tiny", "Small", "Medium", "Large"],
+                correctAnswer: 3
+            }
+        ];
+        
+        // Variables
+        let currentQuestion = 0;
+        let score = 0;
+        let startTime;
+        let timerInterval;
+        let selectedOption = null;
+        let questionAnswered = false;
+        
+        // DOM Elements
+        const progressBar = document.getElementById('progressBar');
+        const timer = document.getElementById('timer');
+        const scoreDisplay = document.getElementById('score');
+        const questionNumber = document.getElementById('questionNumber');
+        const questionText = document.getElementById('questionText');
+        const audioContainer = document.getElementById('audioContainer');
+        const playAudioBtn = document.getElementById('playAudioBtn');
+        const questionAudio = document.getElementById('questionAudio');
+        const optionsContainer = document.getElementById('optionsContainer');
+        const nextBtn = document.getElementById('nextBtn');
+        const resultsContainer = document.getElementById('resultsContainer');
+        const finalAccuracy = document.getElementById('finalAccuracy');
+        const finalTime = document.getElementById('finalTime');
+        const usernameDisplay = document.getElementById('usernameDisplay');
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Display username
+            const username = localStorage.getItem('learningUsername') || 'Guest';
+            usernameDisplay.textContent = username;
+            
+            // Start timer
+            startTime = Date.now();
+            updateTimer();
+            timerInterval = setInterval(updateTimer, 1000);
+            
+            // Load first question
+            loadQuestion();
+            
+            // Event listeners
+            playAudioBtn.addEventListener('click', playAudio);
+            nextBtn.addEventListener('click', nextQuestion);
+            
+            // Option click event (using event delegation)
+            optionsContainer.addEventListener('click', function(e) {
+                const optionCard = e.target.closest('.option-card');
+                if (!optionCard || questionAnswered) return;
+                
+                // Get option index
+                const optionIndex = parseInt(optionCard.dataset.option);
+                
+                // Remove previous selection
+                if (selectedOption !== null) {
+                    document.querySelector(`.option-card[data-option="${selectedOption}"]`).classList.remove('selected');
+                }
+                
+                // Select new option
+                selectedOption = optionIndex;
+                optionCard.classList.add('selected');
+                
+                // Check answer
+                checkAnswer();
+            });
+        });
+        
+        function loadQuestion() {
+            const question = questions[currentQuestion];
+            
+            // Update question number and text
+            questionNumber.textContent = currentQuestion + 1;
+            questionText.textContent = question.text;
+            
+            // Update progress bar
+            const progress = ((currentQuestion) / questions.length) * 100;
+            progressBar.style.width = `${progress}%`;
+            
+            // Update score display
+            scoreDisplay.textContent = `${score} / ${currentQuestion}`;
+            
+            // Handle audio if present
+            if (question.audio) {
+                audioContainer.classList.remove('hidden');
+                questionAudio.src = question.audio;
+            } else {
+                audioContainer.classList.add('hidden');
+            }
+            
+            // Load options
+            const optionElements = optionsContainer.querySelectorAll('.option-card');
+            optionElements.forEach((element, index) => {
+                element.querySelector('p').textContent = question.options[index];
+                element.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            // Reset state
+            selectedOption = null;
+            questionAnswered = false;
+            nextBtn.classList.add('hidden');
+        }
+        
+        function playAudio() {
+            questionAudio.play();
+        }
+        
+        function checkAnswer() {
+            if (questionAnswered) return;
+            
+            const question = questions[currentQuestion];
+            const correctOption = question.correctAnswer;
+            
+            // Mark as answered
+            questionAnswered = true;
+            
+            // Show correct/incorrect
+            const selectedElement = document.querySelector(`.option-card[data-option="${selectedOption}"]`);
+            const correctElement = document.querySelector(`.option-card[data-option="${correctOption}"]`);
+            
+            if (selectedOption === correctOption) {
+                // Correct answer
+                selectedElement.classList.add('correct');
+                score++;
+            } else {
+                // Incorrect answer
+                selectedElement.classList.add('incorrect');
+                correctElement.classList.add('correct');
+            }
+            
+            // Update score
+            scoreDisplay.textContent = `${score} / ${currentQuestion + 1}`;
+            
+            // Show next button
+            nextBtn.classList.remove('hidden');
+        }
+        
+        function nextQuestion() {
+            currentQuestion++;
+            
+            if (currentQuestion < questions.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+        
+        function updateTimer() {
+            const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+            const minutes = Math.floor(elapsedTime / 60);
+            const seconds = elapsedTime % 60;
+            timer.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+        
+        function showResults() {
+            // Stop timer
+            clearInterval(timerInterval);
+            const totalTime = Math.floor((Date.now() - startTime) / 1000);
+            
+            // Calculate accuracy
+            const accuracy = Math.round((score / questions.length) * 100);
+            
+            // Format time
+            const minutes = Math.floor(totalTime / 60);
+            const seconds = totalTime % 60;
+            const timeFormatted = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            // Update results
+            finalAccuracy.textContent = `${accuracy}%`;
+            finalTime.textContent = timeFormatted;
+            
+            // Hide question container and show results
+            document.getElementById('questionContainer').classList.add('hidden');
+            nextBtn.classList.add('hidden');
+            resultsContainer.classList.remove('hidden');
+            
+            // Save results to localStorage
+            const username = localStorage.getItem('learningUsername');
+            if (username) {
+                localStorage.setItem('vocabResults_' + username, JSON.stringify({
+                    accuracy: accuracy,
+                    time: totalTime
+                }));
+            }
+        }
+    </script>
 </body>
 </html>
+
