@@ -1,92 +1,396 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Select Course</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-top: 50px;
-      font-family: sans-serif;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Course - Welcome</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #58cc02, #2b8500);
+            min-height: 100vh;
+            font-family: 'Nunito', sans-serif;
+        }
+        .welcome-card {
+            animation: fadeIn 0.8s ease-in-out;
+        }
+        .course-card {
+            transition: all 0.3s ease;
+        }
+        .course-card:hover {
+            transform: translateY(-5px);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="flex items-center justify-center p-4">
+    <div class="welcome-card bg-white p-8 rounded-2xl shadow-xl w-full max-w-md">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-800">Welcome to Learning Course</h1>
+            <p class="text-gray-600 mt-2">Please enter your username to continue</p>
+        </div>
+        
+        <form id="usernameForm" class="space-y-6">
+            <div>
+                <label for="username" class="block text-sm font-medium text-gray-700 mb-1">Username</label>
+                <input type="text" id="username" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition" required>
+            </div>
+            
+            <button type="submit" class="w-full bg-[#58cc02] hover:bg-[#4aad02] text-white font-bold py-3 px-4 rounded-lg transition duration-200 shadow-md hover:shadow-lg">
+                Save Username
+            </button>
+        </form>
 
-    h1, h2 {
-      font-size: 1.5rem;
-      text-align: center;
-    }
+        <div id="courseSelection" class="mt-8 hidden">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">Available Courses</h2>
+            
+            <div class="grid grid-cols-1 gap-4">
+                <a href="l3.html" class="course-card block bg-blue-50 p-6 rounded-xl border border-blue-100 hover:bg-blue-100">
+                    <div class="flex items-center">
+                        <div class="bg-blue-500 text-white rounded-full w-12 h-12 flex items-center justify-center text-xl font-bold">L3</div>
+                        <div class="ml-4">
+                            <h3 class="font-bold text-lg text-blue-800">Learning Course 3</h3>
+                            <p class="text-blue-600">Vocabulary and Grammar</p>
+                        </div>
+                    </div>
+                </a>
+                
+                <a href="#" class="course-card block bg-purple-50 p-6 rounded-xl border border-purple-100 hover:bg-purple-100">
+                    <div class="flex items-center">
+                        <div class="bg-purple-500 text-white rounded-full w-12 h-12 flex items-center justify-center text-xl font-bold">L4</div>
+                        <div class="ml-4">
+                            <h3 class="font-bold text-lg text-purple-800">Learning Course 4</h3>
+                            <p class="text-purple-600">Coming Soon</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
 
-    input, button {
-      font-size: 1.2rem;
-      padding: 10px;
-      width: 80%;
-      max-width: 300px;
-      margin: 10px auto;
-      display: block;
-    }
+    <script>
+        document.getElementById('usernameForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value.trim();
+            
+            if (username) {
+                // Save username to localStorage
+                localStorage.setItem('learningUsername', username);
+                
+                // Show course selection
+                document.getElementById('usernameForm').classList.add('hidden');
+                document.getElementById('courseSelection').classList.remove('hidden');
+            }
+        });
 
-    ul {
-      list-style-type: none;
-      padding: 0;
-    }
+        // Check if username already exists
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedUsername = localStorage.getItem('learningUsername');
+            if (savedUsername) {
+                document.getElementById('username').value = savedUsername;
+                document.getElementById('usernameForm').classList.add('hidden');
+                document.getElementById('courseSelection').classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
 
-    li {
-      margin: 10px 0;
-    }
-
-    a {
-      font-size: 1.2rem;
-      color: #007bff;
-      text-decoration: none;
-    }
-
-    a:hover {
-      text-decoration: underline;
-    }
-  </style>
+l3.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Course - L3</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #f7f9fc;
+            font-family: 'Nunito', sans-serif;
+            min-height: 100vh;
+        }
+        .course-card {
+            transition: all 0.3s ease;
+        }
+        .course-card:hover {
+            transform: translateY(-5px);
+        }
+        .stats-badge {
+            transition: all 0.3s ease;
+        }
+        .leaderboard-item {
+            transition: all 0.2s ease;
+        }
+        .leaderboard-item:hover {
+            background-color: #f0f7ff;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <h1>Welcome to the Learning Course</h1>
+    <header class="bg-[#58cc02] text-white shadow-md">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center">
+                <h1 class="text-2xl font-bold">Learning Course</h1>
+                <span class="ml-2 bg-white text-[#58cc02] px-2 py-1 rounded-md text-sm font-bold">L3</span>
+            </div>
+            <div class="flex items-center">
+                <span id="usernameDisplay" class="mr-4 font-semibold"></span>
+                <a href="index2.html" class="bg-white text-[#58cc02] px-4 py-2 rounded-lg font-bold hover:bg-gray-100 transition">Back to Courses</a>
+            </div>
+        </div>
+    </header>
 
-  <label for="username">Enter your name:</label>
-  <input type="text" id="username" placeholder="Your name" />
-  <button id="startBtn">Start</button>
+    <main class="container mx-auto px-4 py-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Vocabulary Course Card -->
+            <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                <div class="bg-blue-500 text-white p-4">
+                    <h2 class="text-xl font-bold">Vocabulary Course</h2>
+                </div>
+                <div class="p-6">
+                    <p class="text-gray-700 mb-4">Practice vocabulary with multiple choice questions and listening exercises.</p>
+                    
+                    <div class="mb-6 bg-blue-50 p-4 rounded-lg">
+                        <h3 class="font-bold text-blue-800 mb-2">Your Performance</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="stats-badge bg-blue-100 p-3 rounded-lg text-center">
+                                <p class="text-sm text-blue-600">Accuracy</p>
+                                <p id="vocabAccuracy" class="text-xl font-bold text-blue-800">--%</p>
+                            </div>
+                            <div class="stats-badge bg-blue-100 p-3 rounded-lg text-center">
+                                <p class="text-sm text-blue-600">Completion Time</p>
+                                <p id="vocabTime" class="text-xl font-bold text-blue-800">--:--</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <a href="l3vocab.html" class="block w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg transition duration-200 text-center">
+                        Start Vocabulary Course
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Grammar Course Card -->
+            <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                <div class="bg-purple-500 text-white p-4">
+                    <h2 class="text-xl font-bold">Grammar Course</h2>
+                </div>
+                <div class="p-6">
+                    <p class="text-gray-700 mb-4">Practice grammar with multiple choice questions.</p>
+                    
+                    <div class="mb-6 bg-purple-50 p-4 rounded-lg">
+                        <h3 class="font-bold text-purple-800 mb-2">Your Performance</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="stats-badge bg-purple-100 p-3 rounded-lg text-center">
+                                <p class="text-sm text-purple-600">Accuracy</p>
+                                <p id="grammarAccuracy" class="text-xl font-bold text-purple-800">--%</p>
+                            </div>
+                            <div class="stats-badge bg-purple-100 p-3 rounded-lg text-center">
+                                <p class="text-sm text-purple-600">Completion Time</p>
+                                <p id="grammarTime" class="text-xl font-bold text-purple-800">--:--</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <a href="l3grammar.html" class="block w-full bg-purple-500 hover:bg-purple-600 text-white font-bold py-3 px-4 rounded-lg transition duration-200 text-center">
+                        Start Grammar Course
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Leaderboards -->
+        <div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Vocabulary Leaderboard -->
+            <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                <div class="bg-blue-500 text-white p-4">
+                    <h2 class="text-xl font-bold">Vocabulary Leaderboard</h2>
+                </div>
+                <div class="p-4">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full">
+                            <thead>
+                                <tr class="bg-blue-50">
+                                    <th class="px-4 py-2 text-left text-blue-800">Rank</th>
+                                    <th class="px-4 py-2 text-left text-blue-800">Username</th>
+                                    <th class="px-4 py-2 text-left text-blue-800">Accuracy</th>
+                                    <th class="px-4 py-2 text-left text-blue-800">Time</th>
+                                </tr>
+                            </thead>
+                            <tbody id="vocabLeaderboard">
+                                <tr><td colspan="4" class="px-4 py-4 text-center text-gray-500">No data available</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Grammar Leaderboard -->
+            <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                <div class="bg-purple-500 text-white p-4">
+                    <h2 class="text-xl font-bold">Grammar Leaderboard</h2>
+                </div>
+                <div class="p-4">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full">
+                            <thead>
+                                <tr class="bg-purple-50">
+                                    <th class="px-4 py-2 text-left text-purple-800">Rank</th>
+                                    <th class="px-4 py-2 text-left text-purple-800">Username</th>
+                                    <th class="px-4 py-2 text-left text-purple-800">Accuracy</th>
+                                    <th class="px-4 py-2 text-left text-purple-800">Time</th>
+                                </tr>
+                            </thead>
+                            <tbody id="grammarLeaderboard">
+                                <tr><td colspan="4" class="px-4 py-4 text-center text-gray-500">No data available</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
 
-  <div id="course-links" style="display:none; margin-top: 20px;">
-    <h2>Choose a Course</h2>
-    <ul>
-      <li><a href="l3.html">L.3 - Learning Course</a></li>
-      <li><a href="l4.html">L.4 - Learning Course</a></li>
-    </ul>
-  </div>
-
-  <script>
-    function saveUsername() {
-      const name = document.getElementById('username').value.trim();
-      if (name === "") {
-        alert("Please enter your name.");
-        return;
-      }
-      localStorage.setItem('username', name);
-      document.getElementById('course-links').style.display = 'block';
-    }
-
-    document.getElementById("startBtn").addEventListener("click", saveUsername);
-    document.getElementById("username").addEventListener("keypress", function (e) {
-      if (e.key === "Enter") {
-        saveUsername();
-      }
-    });
-
-    window.onload = function () {
-      const savedName = localStorage.getItem('username');
-      if (savedName) {
-        document.getElementById('username').value = savedName;
-        document.getElementById('course-links').style.display = 'block';
-      }
-    };
-  </script>
+    <script>
+        // Display username
+        document.addEventListener('DOMContentLoaded', function() {
+            const username = localStorage.getItem('learningUsername') || 'Guest';
+            document.getElementById('usernameDisplay').textContent = username;
+            
+            // Load user performance data
+            loadUserPerformance();
+            
+            // Load leaderboards
+            loadLeaderboards();
+        });
+        
+        function loadUserPerformance() {
+            const username = localStorage.getItem('learningUsername');
+            if (!username) return;
+            
+            // Load vocabulary performance
+            const vocabData = JSON.parse(localStorage.getItem('vocabResults_' + username) || '{}');
+            if (vocabData.accuracy !== undefined) {
+                document.getElementById('vocabAccuracy').textContent = vocabData.accuracy + '%';
+                
+                // Format time
+                const minutes = Math.floor(vocabData.time / 60);
+                const seconds = vocabData.time % 60;
+                document.getElementById('vocabTime').textContent = 
+                    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+            
+            // Load grammar performance
+            const grammarData = JSON.parse(localStorage.getItem('grammarResults_' + username) || '{}');
+            if (grammarData.accuracy !== undefined) {
+                document.getElementById('grammarAccuracy').textContent = grammarData.accuracy + '%';
+                
+                // Format time
+                const minutes = Math.floor(grammarData.time / 60);
+                const seconds = grammarData.time % 60;
+                document.getElementById('grammarTime').textContent = 
+                    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+        }
+        
+        function loadLeaderboards() {
+            // Get all localStorage keys
+            const keys = Object.keys(localStorage);
+            
+            // Vocabulary leaderboard
+            const vocabResults = [];
+            keys.filter(key => key.startsWith('vocabResults_')).forEach(key => {
+                const username = key.replace('vocabResults_', '');
+                const data = JSON.parse(localStorage.getItem(key) || '{}');
+                if (data.accuracy !== undefined && data.time !== undefined) {
+                    vocabResults.push({
+                        username,
+                        accuracy: data.accuracy,
+                        time: data.time
+                    });
+                }
+            });
+            
+            // Sort by accuracy (higher is better) and then by time (lower is better)
+            vocabResults.sort((a, b) => {
+                if (b.accuracy !== a.accuracy) return b.accuracy - a.accuracy;
+                return a.time - b.time;
+            });
+            
+            // Display top 10
+            const vocabLeaderboard = document.getElementById('vocabLeaderboard');
+            vocabLeaderboard.innerHTML = '';
+            
+            if (vocabResults.length === 0) {
+                vocabLeaderboard.innerHTML = '<tr><td colspan="4" class="px-4 py-4 text-center text-gray-500">No data available</td></tr>';
+            } else {
+                vocabResults.slice(0, 10).forEach((result, index) => {
+                    const minutes = Math.floor(result.time / 60);
+                    const seconds = result.time % 60;
+                    const timeFormatted = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                    
+                    const row = document.createElement('tr');
+                    row.className = 'leaderboard-item border-b border-gray-100';
+                    row.innerHTML = `
+                        <td class="px-4 py-3 font-bold">${index + 1}</td>
+                        <td class="px-4 py-3">${result.username}</td>
+                        <td class="px-4 py-3">${result.accuracy}%</td>
+                        <td class="px-4 py-3">${timeFormatted}</td>
+                    `;
+                    vocabLeaderboard.appendChild(row);
+                });
+            }
+            
+            // Grammar leaderboard
+            const grammarResults = [];
+            keys.filter(key => key.startsWith('grammarResults_')).forEach(key => {
+                const username = key.replace('grammarResults_', '');
+                const data = JSON.parse(localStorage.getItem(key) || '{}');
+                if (data.accuracy !== undefined && data.time !== undefined) {
+                    grammarResults.push({
+                        username,
+                        accuracy: data.accuracy,
+                        time: data.time
+                    });
+                }
+            });
+            
+            // Sort by accuracy (higher is better) and then by time (lower is better)
+            grammarResults.sort((a, b) => {
+                if (b.accuracy !== a.accuracy) return b.accuracy - a.accuracy;
+                return a.time - b.time;
+            });
+            
+            // Display top 10
+            const grammarLeaderboard = document.getElementById('grammarLeaderboard');
+            grammarLeaderboard.innerHTML = '';
+            
+            if (grammarResults.length === 0) {
+                grammarLeaderboard.innerHTML = '<tr><td colspan="4" class="px-4 py-4 text-center text-gray-500">No data available</td></tr>';
+            } else {
+                grammarResults.slice(0, 10).forEach((result, index) => {
+                    const minutes = Math.floor(result.time / 60);
+                    const seconds = result.time % 60;
+                    const timeFormatted = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                    
+                    const row = document.createElement('tr');
+                    row.className = 'leaderboard-item border-b border-gray-100';
+                    row.innerHTML = `
+                        <td class="px-4 py-3 font-bold">${index + 1}</td>
+                        <td class="px-4 py-3">${result.username}</td>
+                        <td class="px-4 py-3">${result.accuracy}%</td>
+                        <td class="px-4 py-3">${timeFormatted}</td>
+                    `;
+                    grammarLeaderboard.appendChild(row);
+                });
+            }
+        }
+    </script>
 </body>
 </html>
