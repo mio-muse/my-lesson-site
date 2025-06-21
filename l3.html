@@ -1,38 +1,293 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>L.3 Course Overview</title>
-  <link rel="stylesheet" href="css/style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Course - L3</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #f7f9fc;
+            font-family: 'Nunito', sans-serif;
+            min-height: 100vh;
+        }
+        .course-card {
+            transition: all 0.3s ease;
+        }
+        .course-card:hover {
+            transform: translateY(-5px);
+        }
+        .stats-badge {
+            transition: all 0.3s ease;
+        }
+        .leaderboard-item {
+            transition: all 0.2s ease;
+        }
+        .leaderboard-item:hover {
+            background-color: #f0f7ff;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <h1>L.3 Learning Course</h1>
-  <p id="usernameDisplay"></p>
+    <header class="bg-[#58cc02] text-white shadow-md">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center">
+                <h1 class="text-2xl font-bold">Learning Course</h1>
+                <span class="ml-2 bg-white text-[#58cc02] px-2 py-1 rounded-md text-sm font-bold">L3</span>
+            </div>
+            <div class="flex items-center">
+                <span id="usernameDisplay" class="mr-4 font-semibold"></span>
+                <a href="index2.html" class="bg-white text-[#58cc02] px-4 py-2 rounded-lg font-bold hover:bg-gray-100 transition">Back to Courses</a>
+            </div>
+        </div>
+    </header>
 
-  <h2>Vocabulary Course</h2>
-  <a href="l3vocab.html">Go to Vocabulary Course</a>
+    <main class="container mx-auto px-4 py-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Vocabulary Course Card -->
+            <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                <div class="bg-blue-500 text-white p-4">
+                    <h2 class="text-xl font-bold">Vocabulary Course</h2>
+                </div>
+                <div class="p-6">
+                    <p class="text-gray-700 mb-4">Practice vocabulary with multiple choice questions and listening exercises.</p>
+                    
+                    <div class="mb-6 bg-blue-50 p-4 rounded-lg">
+                        <h3 class="font-bold text-blue-800 mb-2">Your Performance</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="stats-badge bg-blue-100 p-3 rounded-lg text-center">
+                                <p class="text-sm text-blue-600">Accuracy</p>
+                                <p id="vocabAccuracy" class="text-xl font-bold text-blue-800">--%</p>
+                            </div>
+                            <div class="stats-badge bg-blue-100 p-3 rounded-lg text-center">
+                                <p class="text-sm text-blue-600">Completion Time</p>
+                                <p id="vocabTime" class="text-xl font-bold text-blue-800">--:--</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <a href="l3vocab.html" class="block w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg transition duration-200 text-center">
+                        Start Vocabulary Course
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Grammar Course Card -->
+            <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                <div class="bg-purple-500 text-white p-4">
+                    <h2 class="text-xl font-bold">Grammar Course</h2>
+                </div>
+                <div class="p-6">
+                    <p class="text-gray-700 mb-4">Practice grammar with multiple choice questions.</p>
+                    
+                    <div class="mb-6 bg-purple-50 p-4 rounded-lg">
+                        <h3 class="font-bold text-purple-800 mb-2">Your Performance</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="stats-badge bg-purple-100 p-3 rounded-lg text-center">
+                                <p class="text-sm text-purple-600">Accuracy</p>
+                                <p id="grammarAccuracy" class="text-xl font-bold text-purple-800">--%</p>
+                            </div>
+                            <div class="stats-badge bg-purple-100 p-3 rounded-lg text-center">
+                                <p class="text-sm text-purple-600">Completion Time</p>
+                                <p id="grammarTime" class="text-xl font-bold text-purple-800">--:--</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <a href="l3grammar.html" class="block w-full bg-purple-500 hover:bg-purple-600 text-white font-bold py-3 px-4 rounded-lg transition duration-200 text-center">
+                        Start Grammar Course
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Leaderboards -->
+        <div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Vocabulary Leaderboard -->
+            <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                <div class="bg-blue-500 text-white p-4">
+                    <h2 class="text-xl font-bold">Vocabulary Leaderboard</h2>
+                </div>
+                <div class="p-4">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full">
+                            <thead>
+                                <tr class="bg-blue-50">
+                                    <th class="px-4 py-2 text-left text-blue-800">Rank</th>
+                                    <th class="px-4 py-2 text-left text-blue-800">Username</th>
+                                    <th class="px-4 py-2 text-left text-blue-800">Accuracy</th>
+                                    <th class="px-4 py-2 text-left text-blue-800">Time</th>
+                                </tr>
+                            </thead>
+                            <tbody id="vocabLeaderboard">
+                                <tr><td colspan="4" class="px-4 py-4 text-center text-gray-500">No data available</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Grammar Leaderboard -->
+            <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                <div class="bg-purple-500 text-white p-4">
+                    <h2 class="text-xl font-bold">Grammar Leaderboard</h2>
+                </div>
+                <div class="p-4">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full">
+                            <thead>
+                                <tr class="bg-purple-50">
+                                    <th class="px-4 py-2 text-left text-purple-800">Rank</th>
+                                    <th class="px-4 py-2 text-left text-purple-800">Username</th>
+                                    <th class="px-4 py-2 text-left text-purple-800">Accuracy</th>
+                                    <th class="px-4 py-2 text-left text-purple-800">Time</th>
+                                </tr>
+                            </thead>
+                            <tbody id="grammarLeaderboard">
+                                <tr><td colspan="4" class="px-4 py-4 text-center text-gray-500">No data available</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
 
-  <div id="courseResults">
-    <p><strong>Total Score (1st attempt):</strong> <span id="totalScore">-</span>%</p>
-    <p><strong>Total Time:</strong> <span id="totalTime">-</span> sec</p>
-  </div>
-
-  <script>
-    const username = localStorage.getItem("username") || "Guest";
-    document.getElementById("usernameDisplay").textContent = `Logged in as: ${username}`;
-
-    const vocabScore = parseInt(localStorage.getItem(`${username}_vocab_score`));
-    const vocabTime = parseInt(localStorage.getItem(`${username}_vocab_time`));
-    const listeningTime = parseInt(localStorage.getItem(`${username}_listening_time`));
-    const totalTime = parseInt(localStorage.getItem(`${username}_total_time`));
-
-    const totalQuestions = 12 + 12; // 12 vocabulary + 12 listening questions
-    const totalCorrect = Math.round((vocabScore / 100) * 12) + 12; // listening is always 100% in final step
-
-    const totalScore = Math.round((totalCorrect / totalQuestions) * 100);
-
-    document.getElementById("totalScore").textContent = !isNaN(totalScore) ? totalScore : "-";
-    document.getElementById("totalTime").textContent = !isNaN(totalTime) ? totalTime : "-";
-  </script>
+    <script>
+        // Display username
+        document.addEventListener('DOMContentLoaded', function() {
+            const username = localStorage.getItem('learningUsername') || 'Guest';
+            document.getElementById('usernameDisplay').textContent = username;
+            
+            // Load user performance data
+            loadUserPerformance();
+            
+            // Load leaderboards
+            loadLeaderboards();
+        });
+        
+        function loadUserPerformance() {
+            const username = localStorage.getItem('learningUsername');
+            if (!username) return;
+            
+            // Load vocabulary performance
+            const vocabData = JSON.parse(localStorage.getItem('vocabResults_' + username) || '{}');
+            if (vocabData.accuracy !== undefined) {
+                document.getElementById('vocabAccuracy').textContent = vocabData.accuracy + '%';
+                
+                // Format time
+                const minutes = Math.floor(vocabData.time / 60);
+                const seconds = vocabData.time % 60;
+                document.getElementById('vocabTime').textContent = 
+                    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+            
+            // Load grammar performance
+            const grammarData = JSON.parse(localStorage.getItem('grammarResults_' + username) || '{}');
+            if (grammarData.accuracy !== undefined) {
+                document.getElementById('grammarAccuracy').textContent = grammarData.accuracy + '%';
+                
+                // Format time
+                const minutes = Math.floor(grammarData.time / 60);
+                const seconds = grammarData.time % 60;
+                document.getElementById('grammarTime').textContent = 
+                    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+        }
+        
+        function loadLeaderboards() {
+            // Get all localStorage keys
+            const keys = Object.keys(localStorage);
+            
+            // Vocabulary leaderboard
+            const vocabResults = [];
+            keys.filter(key => key.startsWith('vocabResults_')).forEach(key => {
+                const username = key.replace('vocabResults_', '');
+                const data = JSON.parse(localStorage.getItem(key) || '{}');
+                if (data.accuracy !== undefined && data.time !== undefined) {
+                    vocabResults.push({
+                        username,
+                        accuracy: data.accuracy,
+                        time: data.time
+                    });
+                }
+            });
+            
+            // Sort by accuracy (higher is better) and then by time (lower is better)
+            vocabResults.sort((a, b) => {
+                if (b.accuracy !== a.accuracy) return b.accuracy - a.accuracy;
+                return a.time - b.time;
+            });
+            
+            // Display top 10
+            const vocabLeaderboard = document.getElementById('vocabLeaderboard');
+            vocabLeaderboard.innerHTML = '';
+            
+            if (vocabResults.length === 0) {
+                vocabLeaderboard.innerHTML = '<tr><td colspan="4" class="px-4 py-4 text-center text-gray-500">No data available</td></tr>';
+            } else {
+                vocabResults.slice(0, 10).forEach((result, index) => {
+                    const minutes = Math.floor(result.time / 60);
+                    const seconds = result.time % 60;
+                    const timeFormatted = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                    
+                    const row = document.createElement('tr');
+                    row.className = 'leaderboard-item border-b border-gray-100';
+                    row.innerHTML = `
+                        <td class="px-4 py-3 font-bold">${index + 1}</td>
+                        <td class="px-4 py-3">${result.username}</td>
+                        <td class="px-4 py-3">${result.accuracy}%</td>
+                        <td class="px-4 py-3">${timeFormatted}</td>
+                    `;
+                    vocabLeaderboard.appendChild(row);
+                });
+            }
+            
+            // Grammar leaderboard
+            const grammarResults = [];
+            keys.filter(key => key.startsWith('grammarResults_')).forEach(key => {
+                const username = key.replace('grammarResults_', '');
+                const data = JSON.parse(localStorage.getItem(key) || '{}');
+                if (data.accuracy !== undefined && data.time !== undefined) {
+                    grammarResults.push({
+                        username,
+                        accuracy: data.accuracy,
+                        time: data.time
+                    });
+                }
+            });
+            
+            // Sort by accuracy (higher is better) and then by time (lower is better)
+            grammarResults.sort((a, b) => {
+                if (b.accuracy !== a.accuracy) return b.accuracy - a.accuracy;
+                return a.time - b.time;
+            });
+            
+            // Display top 10
+            const grammarLeaderboard = document.getElementById('grammarLeaderboard');
+            grammarLeaderboard.innerHTML = '';
+            
+            if (grammarResults.length === 0) {
+                grammarLeaderboard.innerHTML = '<tr><td colspan="4" class="px-4 py-4 text-center text-gray-500">No data available</td></tr>';
+            } else {
+                grammarResults.slice(0, 10).forEach((result, index) => {
+                    const minutes = Math.floor(result.time / 60);
+                    const seconds = result.time % 60;
+                    const timeFormatted = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                    
+                    const row = document.createElement('tr');
+                    row.className = 'leaderboard-item border-b border-gray-100';
+                    row.innerHTML = `
+                        <td class="px-4 py-3 font-bold">${index + 1}</td>
+                        <td class="px-4 py-3">${result.username}</td>
+                        <td class="px-4 py-3">${result.accuracy}%</td>
+                        <td class="px-4 py-3">${timeFormatted}</td>
+                    `;
+                    grammarLeaderboard.appendChild(row);
+                });
+            }
+        }
+    </script>
 </body>
 </html>
